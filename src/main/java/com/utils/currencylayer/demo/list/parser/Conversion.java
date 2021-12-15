@@ -28,8 +28,8 @@ public class Conversion {
 		//this.data=null;
 		JSONParser a=new JSONParser();
 		try {
-			this.srcValuta=a.getValuefromFile("C:\\Users\\parte\\OneDrive\\Desktop\\response.json", src.toUpperCase());
-			this.tgtValuta=a.getValuefromFile("C:\\Users\\parte\\OneDrive\\Desktop\\response.json", tgt.toUpperCase());
+			this.srcValuta=a.getValuefromFile("response.json", src.toUpperCase());
+			this.tgtValuta=a.getValuefromFile("response.json", tgt.toUpperCase());
 		} catch (URISyntaxException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
