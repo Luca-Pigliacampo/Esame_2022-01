@@ -21,32 +21,20 @@ import org.springframework.web.client.RestTemplate;
 import com.example.currencylayer.demo.list.Valuta;
 
 public class JSONParser {
-	// tutti i possibili metodi che prendono info dall'Api ES: EUR
 	private final String api_key = "b1478ef56e2d58d7c531d961989d2db3";
-	
-	public String getApi_key() {
-		return api_key;
-	}
-
 	private String[] Endpoint= {"list" , "live","historical?date=%04d-%02d-%02d "};
 
 	public Valuta getValuefromApi(String code) { // GBP EUR
-		JSONObject obj = JsonFromApi();
-		// System.out.println(obj);
-		// System.out.println("\n");
-
+		JSONObject obj = JsonFromApi(0,LocalDate.now());
 		Valuta value = new Valuta(code);
 		try {
 
 			JSONObject currenciesObj = obj.getJSONObject("currencies");
 			String description = currenciesObj.getString(code);
-			// String c=code+dest;//USDEUR
 			value.setDescription(description);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return value;
 	}
 
@@ -57,7 +45,6 @@ public class JSONParser {
 		String str = file_input.nextLine();
 		JSONObject obj1 = new JSONObject(str);
 		JSONObject obj = obj1.getJSONObject("currencies");
-		// System.out.println(obj);
 		String description= (String) obj.getString(Code);
 		file_input.close();
 		value.setDescription(description);
@@ -65,8 +52,8 @@ public class JSONParser {
 	}
 
 	// @param nomeFile dove salvare
-	public void salvaSuFile(String nomeFile) {
-		JSONObject obj = JsonFromApi();
+	public void salvaSuFile(String nomeFile,int i ,LocalDate d) {
+		JSONObject obj = JsonFromApi(i,d);
 		try {
 			PrintWriter file_output = new PrintWriter(new BufferedWriter(new FileWriter(nomeFile)));
 			file_output.println(obj);
@@ -78,7 +65,6 @@ public class JSONParser {
 
 	}
 
-	@SuppressWarnings("static-access")
 	public JSONObject JsonFromApi(int i,LocalDate d) {
 		JSONObject obj;
 		String url = "http://api.currencylayer.com/"+Endpoint[i] + "?access_key=" + api_key;
@@ -90,12 +76,47 @@ public class JSONParser {
 			year=Integer.parseInt(conv[0]);
 			month=Integer.parseInt(conv[1]);
 			days=Integer.parseInt(conv[2]);
-			String end=Endpoint[2].format("historical?date=%04d-%02d-%02d" ,year,month,days);
+			String end=String.format("historical?date=%04d-%02d-%02d" ,year,month,days);
 			url="http://api.currencylayer.com/"+end + "?access_key=" + api_key;;
 		}
 		RestTemplate rt = new RestTemplate();
 		obj = new JSONObject(rt.getForObject(url, String.class));
 		return obj;
+	}
+	
+	public String getApi_key() {
+		return api_key;
+	}
+	public Currency getCurrencyfromApi(String code,LocalDate d) {
+		JSONObject obj;
+		if(d==LocalDate.now())
+		obj = JsonFromApi(1,LocalDate.now());
+		else
+			obj=JsonFromApi(2,d);
+		String date;
+		String path="valuta.json";
+		Currency currency = new Currency();
+		Valuta valuta=new Valuta(code);
+		try {
+			this.salvaSuFile(path, 0, LocalDate.now());
+			valuta=this.getValuefromFile( path, code);
+
+			JSONObject quotesObj = obj.getJSONObject("quotes");
+			double reateUSDx = quotesObj.getDouble("USD"+code);
+			Date timeStampDate = new Date((long)(obj.getLong("timestamp")*1000)); 
+			 LocalDateTime a=Instant.ofEpochMilli(timeStampDate.getTime())
+				      .atZone(ZoneId.of("Europe/Rome"))
+				      .toLocalDateTime();
+			 DateTimeFormatter formatter = DateTimeFormatter.
+		                ofPattern("yyyy-MM-dd",Locale.ITALY).withZone(ZoneId.of("Europe/Rome"));
+			 date=a.format(formatter);
+			 currency.setValuta(valuta);
+			 currency.setExchange_rate(reateUSDx);
+			 currency.setDate(date);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return currency;
 	}
 
 }
