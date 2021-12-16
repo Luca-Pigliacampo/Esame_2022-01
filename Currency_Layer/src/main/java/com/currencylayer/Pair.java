@@ -1,27 +1,32 @@
 package com.currencylayer;
 
-public class Currency {
-	private Valuta valuta;
+public class Pair extends Currency{
+	
 	private double exchange_rate;
 	
 	
 	
-	public Currency() {
+	public Pair() {
 		super();
 	}
 	
-	public Valuta getValuta() {
-		return valuta;
+
+	public Pair(String code, String description) {
+		super(code, description);
+		// TODO Auto-generated constructor stub
 	}
-	public void setValuta(Valuta valuta) {
-		this.valuta = valuta;
+
+
+	public Pair(String code2) {
+		super(code2);
+		// TODO Auto-generated constructor stub
 	}
+
+
 	public double getExchange_rate() {
 		return exchange_rate;
 	}
 	public void setExchange_rate(double exchange_rate) {
 		this.exchange_rate = exchange_rate;
 	}
-
-
 }

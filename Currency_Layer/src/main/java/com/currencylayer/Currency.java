@@ -3,21 +3,21 @@ package com.currencylayer;
 import java.util.Objects;
 
 
-public class Valuta {
+public class Currency {
 	private String code; 
 	private String description;
 	
-	public Valuta() {
+	public Currency() {
 		super();
 	}
 	
-	public Valuta(String code,String description) {
+	public Currency(String code,String description) {
 		  this.code = code;
 		  this.description = description;
 	  }
 
 
-	public Valuta(String code2) {
+	public Currency(String code2) {
 		// TODO Auto-generated constructor stub
 		this.code=code2;
 		this.description=null;
@@ -54,7 +54,7 @@ public class Valuta {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Valuta other = (Valuta) obj;
+		Currency other = (Currency) obj;
 		return Objects.equals(code, other.code) && Objects.equals(description, other.description);
 	}
 
