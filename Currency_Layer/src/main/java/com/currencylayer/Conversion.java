@@ -15,8 +15,8 @@ import org.json.JSONObject;
 import com.currencylayer.parse.JSONParser;
 
 public class Conversion {
-	private Currency src;
-	private Currency tgt;
+	private Pair src;
+	private Pair tgt;
 	private double amount;
 	private double result;
 	private double exchange_rate_src_tgt;
@@ -35,16 +35,16 @@ public class Conversion {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public Currency getSrc() {
+	public Pair getSrc() {
 		return src;
 	}
-	public void setSrc(Currency src) {
+	public void setSrc(Pair src) {
 		this.src = src;
 	}
-	public Currency getTgt() {
+	public Pair getTgt() {
 		return tgt;
 	}
-	public void setTgt(Currency tgt) {
+	public void setTgt(Pair tgt) {
 		this.tgt = tgt;
 	}
 	public double getAmount() {
@@ -68,7 +68,7 @@ public class Conversion {
 	public void conversion(String src,String tgt,double amount) {
 		this.amount=amount;
 		JSONParser a=new JSONParser();
-		a.salvaSuFile("live.json", 1, null);
+		a.saveOnFile("live.json", 1, null);
 		try {
 			this.src=a.getCurrencyfromFile("live.json", src);
 		} catch (MalformedURLException e) {
