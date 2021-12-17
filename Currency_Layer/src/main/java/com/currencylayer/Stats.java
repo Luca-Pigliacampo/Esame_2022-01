@@ -4,20 +4,23 @@ import java.util.HashMap;
 import com.currencylayer.parse.JSONParser;
 import java.time.LocalDate;
 import org.json.JSONObject;
+import java.util.ArrayList;
 
 public class Stats{
 
-	private JSONObject[7] days;
+	private ArrayList<JSONObject> days = new ArrayList<JSONObject>;
 
-	public Map<String, double> createMap(String currency, String base, String[] options, LocalDate date)
+	public Map<String, double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate)
 	{
-		for(int i = 0; i < 7; i++){
-			LocalDate day = date.minusDays(i);
+		localDate limit = startDate.minusDays(1);
+		LocalDate day = endDate;
+		while(! day.equals(limit)){
 			if(day.equals(LocalDate.now())){
-				this.days[i] = JSONParser.jsonFromApi(1, day);
+				this.days.add(JSONParser.jsonFromApi(1, day));
 			}else{
-				this.days[i] = JSONParser.jsonFromApi(2, day);
+				this.days.add(JSONParser.jsonFromApi(2, day));
 			}
+			day = day.minusDays(1);
 		}
 		Map<String, double> res = new HashMap();
 		for(String req : options){
@@ -42,10 +45,10 @@ public class Stats{
 	{
 		double acc = 0;
 		double unit;
-		for(int i = 0; i < 7; i++){
+		for(int i = 0; i < days.size; i++){
 			if(base.length() == 3 && currency.length() == 3){
-				unit = 1/days[i].getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				acc += (1/days[i].getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				acc += (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 			}
 		}
 		return acc/7;
@@ -55,10 +58,10 @@ public class Stats{
 		acc = 0;
 		double unit;
 		double tmp;
-		for(int i = 0; i < 7; i++){
+		for(int i = 0; i < days.size; i++){
 			if(base.length() == 3 && currency.length() == 3){
-				unit = 1/days[i].getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				tmp = (((1/days[i].getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit) - avg);
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				tmp = (((1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit) - avg);
 				acc += (tmp * tmp);
 			}
 		}
@@ -67,10 +70,10 @@ public class Stats{
 	private double minimum(String currency, String base){
 		double tmp;
 		double acc;
-		for(int i = 0; i < 7; i++){
+		for(int i = 0; i < days.size; i++){
 			if(base.length() == 3 && currency.length() == 3){
-				unit = 1/days[i].getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				tmp = (1/days[i].getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 				if(i == 0 || tmp < acc)
 					acc = tmp;
 			}
@@ -80,10 +83,10 @@ public class Stats{
 	private double maximum(String currency, String base){
 		double tmp;
 		double acc;
-		for(int i = 0; i < 7; i++){
+		for(int i = 0; i < days.size; i++){
 			if(base.length() == 3 && currency.length() == 3){
-				unit = 1/days[i].getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				tmp = (1/days[i].getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 				if(i == 0 || tmp > acc)
 					acc = tmp;
 			}
