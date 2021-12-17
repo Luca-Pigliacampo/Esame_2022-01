@@ -22,7 +22,7 @@ import com.currencylayer.Pair;
 
 public class JSONParser {
 	private final String api_key = "3d4885c32c9a655712aff09b44c7ccf6";
-	private String[] Endpoint= {"list" , "live","historical?date=%04d-%02d-%02d "};
+	private String[] Endpoint= {"list" , "live","&date=%04d-%02d-%02d "};
 
 	/**
 	 * 
@@ -80,8 +80,8 @@ public class JSONParser {
 			year=Integer.parseInt(conv[0]); 
 			month=Integer.parseInt(conv[1]);
 			days=Integer.parseInt(conv[2]);
-			String end=String.format("historical?date=%04d-%02d-%02d" ,year,month,days);
-			url="http://api.currencylayer.com/"+end + "?access_key=" + api_key;
+			String end=String.format("&date=%04d-%02d-%02d" ,year,month,days);
+			url="http://api.currencylayer.com/historical"+ "?access_key=" + api_key+end;
 		}
 		RestTemplate rt = new RestTemplate();
 		obj = new JSONObject(rt.getForObject(url, String.class));
@@ -95,7 +95,7 @@ public class JSONParser {
 	public Pair getPairfromApi(String code,LocalDate d) {
 		JSONObject obj;
 		JSONObject quotesObj;
-		if(d==LocalDate.now() || d==null)
+		if(d.equals(LocalDate.now()) || d==null)
 			obj = JsonFromApi(1,LocalDate.now());
 		else
 			obj=JsonFromApi(2,d);
