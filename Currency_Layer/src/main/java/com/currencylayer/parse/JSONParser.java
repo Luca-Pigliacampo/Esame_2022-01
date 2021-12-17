@@ -106,7 +106,7 @@ public class JSONParser {
 			currency=this.getValuefromFile( path, code);
 
 			quotesObj = obj.getJSONObject("quotes");
-			double reateUSDx = quotesObj.getDouble("USD"+code.toUpperCase());
+			double reateUSDx = quotesObj.getDouble("USD"+code);
 
 			pair.setCode(currency.getCode());
 			pair.setDescription(currency.getDescription());
