@@ -70,7 +70,7 @@ public class Conversion {
 		JSONParser a=new JSONParser();
 		a.saveOnFile("live.json", 1, null);
 		try {
-			this.src=a.getCurrencyfromFile("live.json", src);
+			this.src=a.getCurrencyfromFile("live.json", src.toUpperCase());
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -82,7 +82,7 @@ public class Conversion {
 			e.printStackTrace();
 		}
 		try {
-			this.tgt=a.getCurrencyfromFile("live.json", tgt);
+			this.tgt=a.getCurrencyfromFile("live.json", tgt.toUpperCase());
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
