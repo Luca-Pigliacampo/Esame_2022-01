@@ -48,5 +48,13 @@ public class Controller {
 		return ResponseEntity.ok(pair);
 		
 	}
+	@GetMapping (value="/live", params= {"src", "tgt"})
+	public ResponseEntity<Conversion> getLiveExchange(@RequestParam String src, @RequestParam String tgt){
+		Conversion conv=new Conversion();
+		conv.conversion(src, tgt, 1);
+		
+		return ResponseEntity.ok(conv);
+		
+	}
 
 }
