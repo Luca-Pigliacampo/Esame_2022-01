@@ -40,17 +40,18 @@ public class Controller {
 		}
 
 	@GetMapping(value="/stat", params={"cur","bas","opt","std","end"})
-	public ResponseEntity<ArrayList<HashMap<String,Double>>> getStats(
+	public ResponseEntity<HashMap<String,HashMap<String,Double>>> getStats(
 			@RequestParam String[] cur,
 			@RequestParam String bas,
 			@RequestParam String[] opt,
 			@RequestParam String std,
 			@RequestParam String end)
 	{
-		ArrayList<HashMap<String,Double>> res = new ArrayList<HashMap<String,Double>>();
+		HashMap<String,HashMap<String,Double>> res = new HashMap<String,HashMap<String,Double>>();
 		Stats stObj = new Stats();
 		for(String moneta : cur){
-			res.add(stObj.createMap(moneta,
+			res.put(moneta, stObj.createMap(
+						moneta,
 						bas,
 						opt,
 						LocalDate.parse(std),
