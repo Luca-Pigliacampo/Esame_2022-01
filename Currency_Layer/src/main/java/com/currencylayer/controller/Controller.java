@@ -5,7 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.time.LocalDate;
+
 import com.currencylayer.Conversion;
+
+import com.currencylayer.Stats;
 
 @RestController
 public class Controller {
@@ -33,4 +39,30 @@ public class Controller {
 
 		}
 
+	@GetMapping(value="/stat", params={"cur","bas","opt","std","end"})
+	public ResponseEntity<ArrayList<HashMap<String,Double>>> getStats(
+			@RequestParam String[] cur,
+			@RequestParam String bas,
+			@RequestParam String[] opt,
+			@RequestParam String std,
+			@RequestParam String end)
+	{
+		ArrayList<HashMap<String,Double>> res = new ArrayList<HashMap<String,Double>>();
+		Stats stObj = new Stats();
+		for(String moneta : cur){
+			res.add(stObj.createMap(moneta,
+						bas,
+						opt,
+						LocalDate.parse(std),
+						LocalDate.parse(end)));
+
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return ResponseEntity.ok(res);
+	}
 }

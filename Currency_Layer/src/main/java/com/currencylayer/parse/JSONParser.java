@@ -21,7 +21,7 @@ import com.currencylayer.Pair;
 
 
 public class JSONParser {
-	private final String api_key = "3d4885c32c9a655712aff09b44c7ccf6";
+	private final String api_key = "74ef17a96d20af4e419373546586aa95";
 	private String[] Endpoint= {"list" , "live","historical?date=%04d-%02d-%02d "};
 
 	/**

@@ -8,33 +8,50 @@ import java.util.ArrayList;
 
 public class Stats{
 
-	private ArrayList<JSONObject> days = new ArrayList<JSONObject>;
+	private boolean empty;
 
-	public Map<String, double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate)
+	private ArrayList<JSONObject> days = new ArrayList<JSONObject>();
+
+	public Stats()
 	{
-		localDate limit = startDate.minusDays(1);
+		this.empty = true;
+	}
+
+	public HashMap<String, Double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate)
+	{
+		LocalDate limit = startDate.minusDays(1);
 		LocalDate day = endDate;
-		while(! day.equals(limit)){
-			if(day.equals(LocalDate.now())){
-				this.days.add(JSONParser.jsonFromApi(1, day));
-			}else{
-				this.days.add(JSONParser.jsonFromApi(2, day));
+		JSONParser jp = new JSONParser();
+		if(this.empty){
+			while(! day.equals(limit)){
+				if(day.equals(LocalDate.now())){
+					this.days.add(jp.JsonFromApi(1, day));
+				}else{
+					this.days.add(jp.JsonFromApi(2, day));
+				}
+				day = day.minusDays(1);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			day = day.minusDays(1);
+			this.empty = false;
 		}
-		Map<String, double> res = new HashMap();
+		HashMap<String, Double> res = new HashMap();
 		for(String req : options){
 			if(req.equals("average")){
-				res.put("average", this.average(currency, base));
+				res.put("average", new Double(this.average(currency, base)));
 			}
 			if(req.equals("variance")){
-				res.put("variance", this.variance(currency, base));
+				res.put("variance", new Double(this.variance(currency, base)));
 			}
 			if(req.equals("minimum")){
-				res.put("minimum", this.minimum(currency, base));
+				res.put("minimum", new Double(this.minimum(currency, base)));
 			}
 			if(req.equals("maximum")){
-				res.put("maximum", this.maximum(currency, base));
+				res.put("maximum", new Double(this.maximum(currency, base)));
 			}
 		}
 
@@ -45,20 +62,20 @@ public class Stats{
 	{
 		double acc = 0;
 		double unit;
-		for(int i = 0; i < days.size; i++){
+		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
 				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				acc += (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
+				acc += (1/days.get(i).getDouble("USD" + currency.toUpperCase()))/unit;
 			}
 		}
 		return acc/7;
 	}
 	private double variance(String currency, String base){
 		double avg = this.average(currency, base);
-		acc = 0;
+		double acc = 0;
 		double unit;
 		double tmp;
-		for(int i = 0; i < days.size; i++){
+		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
 				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
 				tmp = (((1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit) - avg);
@@ -69,8 +86,9 @@ public class Stats{
 	}
 	private double minimum(String currency, String base){
 		double tmp;
-		double acc;
-		for(int i = 0; i < days.size; i++){
+		double acc=0;
+		double unit;
+		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
 				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
 				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
@@ -82,8 +100,9 @@ public class Stats{
 	}
 	private double maximum(String currency, String base){
 		double tmp;
-		double acc;
-		for(int i = 0; i < days.size; i++){
+		double acc=0;
+		double unit;
+		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
 				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
 				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
