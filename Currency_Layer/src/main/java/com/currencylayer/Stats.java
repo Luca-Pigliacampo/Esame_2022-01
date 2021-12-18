@@ -65,7 +65,7 @@ public class Stats{
 		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
 				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				acc += (1/days.get(i).getDouble("USD" + currency.toUpperCase()))/unit;
+				acc += (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 			}
 		}
 		return acc/7;
