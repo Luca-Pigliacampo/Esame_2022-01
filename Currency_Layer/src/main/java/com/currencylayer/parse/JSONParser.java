@@ -81,7 +81,7 @@ public class JSONParser {
 			month=Integer.parseInt(conv[1]);
 			days=Integer.parseInt(conv[2]);
 			String end=String.format("historical?date=%04d-%02d-%02d" ,year,month,days);
-			url="http://api.currencylayer.com/"+end + "?access_key=" + api_key;
+			url="http://api.currencylayer.com/"+end + "&access_key=" + api_key;
 		}
 		RestTemplate rt = new RestTemplate();
 		obj = new JSONObject(rt.getForObject(url, String.class));
