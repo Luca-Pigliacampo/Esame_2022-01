@@ -1,5 +1,5 @@
 package com.currencylayer.exception;
 
-public class AmountFormatException {
-
+public class AmountFormatException extends Exception {
+	
 }
