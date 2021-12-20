@@ -1,5 +1,6 @@
 package com.currencylayer.controller;
 
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 
 import org.json.JSONObject;
@@ -10,14 +11,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.currencylayer.Conversion;
+import com.currencylayer.Currency;
 import com.currencylayer.Pair;
+import com.currencylayer.exception.CurrencyNotFoundException;
+import com.currencylayer.exception.DateErrorException;
+import com.currencylayer.exception.ExceptionModel;
 import com.currencylayer.parse.JSONParser;
 
 @RestController
 public class Controller {
 
 	@GetMapping(value="/conversion", params= {"src","tgt","amount"})
-	public ResponseEntity<Conversion[]> getvalue(@RequestParam String[] src, @RequestParam String[] tgt,@RequestParam double amount) {
+	public ResponseEntity<Conversion[]> getvalue(@RequestParam String[] src, @RequestParam String[] tgt,@RequestParam double amount) throws URISyntaxException {
 		Conversion[] conv=new Conversion[src.length*tgt.length];
 		int k=0;
 		
@@ -41,7 +46,7 @@ public class Controller {
 
 	}
 	@GetMapping (value="/liveExchange", params={"src"})
-	public ResponseEntity<Pair> getLivePair (@RequestParam String src){
+	public ResponseEntity<Pair> getLivePair (@RequestParam String src) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
 		JSONParser pairObj = new JSONParser();
 		Pair pair=pairObj.getPairfromApi(src, LocalDate.now());
 		
@@ -49,12 +54,11 @@ public class Controller {
 		
 	}
 	@GetMapping (value="/live", params= {"src", "tgt"})
-	public ResponseEntity<Conversion> getLiveExchange(@RequestParam String src, @RequestParam String tgt){
+	public ResponseEntity<Conversion> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
 		Conversion conv=new Conversion();
 		conv.conversion(src, tgt, 1);
 		
 		return ResponseEntity.ok(conv);
 		
 	}
-
 }
