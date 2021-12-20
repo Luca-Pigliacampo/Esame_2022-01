@@ -13,9 +13,9 @@ public class Handler {
 	@ExceptionHandler(value = {CurrencyNotFoundException.class})
 	public ResponseEntity<ExceptionModel> handleCurrencyNotFoundException(CurrencyNotFoundException e){
 		
-		ExceptionModel er=new ExceptionModel (e.getMessage(), HttpStatus.BAD_GATEWAY, ZonedDateTime.now());
+		ExceptionModel er=new ExceptionModel (e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
 
-		return new ResponseEntity<>(er, HttpStatus.BAD_GATEWAY);
+		return new ResponseEntity<>(er, HttpStatus.BAD_REQUEST);
 
 	}
 	
