@@ -17,11 +17,12 @@ import org.springframework.web.client.RestTemplate;
 
 import com.currencylayer.Currency;
 import com.currencylayer.Pair;
+import com.currencylayer.exception.CurrencyNotFoundException;
 
 
 
 public class JSONParser {
-	private final String api_key = "0123456789qwertyuiopasdfghjklzxc";
+	private final String api_key = "3d4885c32c9a655712aff09b44c7ccf6";
 	private String[] Endpoint= {"list" , "live","&date=%04d-%02d-%02d "};
 
 	/**
@@ -29,29 +30,34 @@ public class JSONParser {
 	 * @param code sigla moneta
 	 * @return	oggetto currency corrispondente
 	 */
-	public Currency getValuefromApi(String code) { // GBP EUR
+	public Currency getValuefromApi(String code)
+			throws CurrencyNotFoundException { // GBP EUR
 		JSONObject obj = JsonFromApi (0,LocalDate.now()); //Prende il JSON object presente sull'endpoint "list"
 		Currency currency = new Currency(code); //istanza dell'oggetto currency con il code corrispondente
-		try {
-			JSONObject currenciesObj = obj.getJSONObject("currencies"); 
-			String description = currenciesObj.getString(code);
-			currency.setDescription(description);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		JSONObject currenciesObj = obj.getJSONObject("currencies"); 
+		
+		String description = currenciesObj.getString(code);
+		currency.setDescription(description);
+		
+
 		return currency;
 	} //da chiedere se togliere
 
 	public Currency getValuefromFile(String path, String Code)
-			throws URISyntaxException, MalformedURLException, IOException {
+			throws URISyntaxException, MalformedURLException, IOException, CurrencyNotFoundException {
 		Currency currency = new Currency(Code);
 		Scanner file_input = new Scanner(new BufferedReader(new FileReader(path)));
 		String str = file_input.nextLine();//Prende l'intero JSON come stringa 
 		JSONObject obj1 = new JSONObject(str);//lo converte in JSON obj
-		JSONObject obj = obj1.getJSONObject("currencies");//associa l'oggetto JSON corrispondente alla chiave currencies
-		String description= obj.getString(Code);
-		file_input.close();
-		currency.setDescription(description);
+		try {
+			JSONObject obj = obj1.getJSONObject("currencies");//associa l'oggetto JSON corrispondente alla chiave currencies
+			String description= obj.getString(Code);
+			file_input.close();
+			currency.setDescription(description);}
+		catch (CurrencyNotFoundException e) {
+			throw new CurrencyNotFoundException("Valuta inesistente");
+		}
 		return currency;
 	}
 
