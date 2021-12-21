@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.time.LocalDate;
 
 import com.currencylayer.Conversion;
@@ -60,11 +61,9 @@ public class Controller {
 		
 	}
 	@GetMapping (value="/live", params= {"src", "tgt"})
-	public ResponseEntity<Conversion> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
+	public Map<Sting,Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
 		Conversion conv=new Conversion();
-		conv.conversion(src, tgt, 1);
-		
-		return ResponseEntity.ok(conv);
+		return conv.conversion(src,tgt);
 		
 	}
 
