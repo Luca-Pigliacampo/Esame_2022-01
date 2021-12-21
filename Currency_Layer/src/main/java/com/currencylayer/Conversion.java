@@ -9,11 +9,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONObject;
+import com.google.gson.Gson;
 
 import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.parse.JSONParser;
@@ -98,7 +100,7 @@ public class Conversion {
 		this.date=date ;
 
 	}
-	public Map conversion(String src,String tgt) throws IOException, URISyntaxException {
+	public Map conversion(String src,String tgt) throws IOException, URISyntaxException, CurrencyNotFoundException {
 		this.amount=1;
 		JSONParser a=new JSONParser();
 		a.saveOnFile("live.json", 1, LocalDate.now());
@@ -124,8 +126,46 @@ public class Conversion {
 		return map;
 
 	}
+	//metodo da controllare con conversion(String src,String tgt) per sapere quale conviene usare
+	public Map<String,Object> JsonModel(String src,String tgt) throws MalformedURLException, URISyntaxException, IOException{
+		Conversion b=new Conversion();
+		JSONParser a=new JSONParser();
+		b.conversion(src, tgt, 1);
+		JSONObject main=null;
+		JSONObject main1=null;
+
+		try {
+			main=new JSONObject(a.getCurrencyfromFile("valuta.json", src));
+			main1=new JSONObject(a.getCurrencyfromFile("valuta.json", tgt));
+
+		} catch (URISyntaxException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Map<String,Object> map=new LinkedHashMap<String, Object>();
+		@SuppressWarnings("unchecked")
+		HashMap<String, Object> yourHashMap = new Gson().fromJson(main.toString(), HashMap.class);	
+		@SuppressWarnings("unchecked")
+		HashMap<String, Object> yourHashMap1 = new Gson().fromJson(main1.toString(), HashMap.class);	
+
+		map.put("src", yourHashMap);
+		map.put("tgt",yourHashMap1);
+		map.put("amount", b.getAmount());
+		map.put("exchange_rate_src_tgt", b.getExchange_rate_src_tgt());
+		map.put("date", b.getDate());
+		
+		
+		
+		return map;
 
 
+		
+		
+	}
+
+
+	
+	
 	public double getExchange_rate_src_tgt() {
 		return exchange_rate_src_tgt;
 	}

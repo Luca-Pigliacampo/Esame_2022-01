@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.currencylayer.Currency;
 import com.currencylayer.Pair;
+import com.currencylayer.exception.AmountFormatException;
 import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.exception.DateErrorException;
 
@@ -102,7 +103,7 @@ public JSONObject JsonFromApi(int i,LocalDate d)throws CurrencyNotFoundException
 public String getApi_key() {
 	return api_key;
 }
-public Pair getPairfromApi(String code,LocalDate d)  throws URISyntaxException, CurrencyNotFoundException {
+public Pair getPairfromApi(String code,LocalDate d)  throws URISyntaxException, MalformedURLException, IOException{
 	JSONObject obj;
 	JSONObject quotesObj;
 	if(d.equals(LocalDate.now()) || d==null)
@@ -122,13 +123,15 @@ public Pair getPairfromApi(String code,LocalDate d)  throws URISyntaxException, 
 		pair.setDescription(currency.getDescription());
 		pair.setExchange_rate(reateUSDx);
 		Thread.sleep(5000);
-	} catch (Exception e) {
+	} catch (InterruptedException e) {
 		e.printStackTrace();
+	} catch (CurrencyNotFoundException e) {
+		throw new CurrencyNotFoundException("La valuta non esiste");
 	}
 	return pair;
 }
 
-public Pair getCurrencyfromFile(String path, String Code) throws  IOException, DateErrorException, CurrencyNotFoundException, MalformedURLException, URISyntaxException{
+public Pair getCurrencyfromFile(String path, String Code) throws  AmountFormatException, IOException, DateErrorException, CurrencyNotFoundException, MalformedURLException, URISyntaxException{
 	String path1="valuta.json";
 	JSONObject Obj;
 	JSONObject quotesObj;
