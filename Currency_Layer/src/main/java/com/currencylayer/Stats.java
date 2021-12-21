@@ -17,6 +17,13 @@ public class Stats{
 		this.empty = true;
 	}
 
+	/**
+	 * @param bas currency to use as unit of measurement
+	 * @param opt name of the informations to get in a comma separated list, accepted values: average,variance,minimum,maximum
+	 * @param cur currency to get statistics about in a comma separated list
+	 * @param std start date of the measurements
+	 * @param end end date of the measurements
+	 */
 	public HashMap<String, Double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate)
 	{
 		LocalDate limit = startDate.minusDays(1);
