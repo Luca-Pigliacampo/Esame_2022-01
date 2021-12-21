@@ -1,5 +1,7 @@
 package com.currencylayer.controller;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.time.LocalDate;
 
 import com.currencylayer.Conversion;
@@ -28,7 +31,7 @@ import com.currencylayer.Stats;
 public class Controller {
 
 	@GetMapping(value="/conversion", params= {"src","tgt","amount"})
-	public ResponseEntity<Conversion[]> getvalue(@RequestParam String[] src, @RequestParam String[] tgt,@RequestParam double amount) throws URISyntaxException {
+	public ResponseEntity<Conversion[]> getvalue(@RequestParam String[] src, @RequestParam String[] tgt,@RequestParam double amount) throws URISyntaxException, MalformedURLException, IOException {
 		Conversion[] conv=new Conversion[src.length*tgt.length];
 		int k=0;
 		
@@ -60,11 +63,10 @@ public class Controller {
 		
 	}
 	@GetMapping (value="/live", params= {"src", "tgt"})
-	public ResponseEntity<Conversion> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
+	public Map<String, Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException, IOException{
 		Conversion conv=new Conversion();
-		conv.conversion(src, tgt, 1);
+		return conv.conversion(src, tgt);
 		
-		return ResponseEntity.ok(conv);
 		
 	}
 
@@ -75,7 +77,7 @@ public class Controller {
 			@RequestParam String bas,
 			@RequestParam String[] opt,
 			@RequestParam String std,
-			@RequestParam String end)
+			@RequestParam String end) throws CurrencyNotFoundException, DateErrorException, URISyntaxException
 	{
 		HashMap<String,HashMap<String,Double>> res = new HashMap<String,HashMap<String,Double>>();
 		Stats stObj = new Stats();

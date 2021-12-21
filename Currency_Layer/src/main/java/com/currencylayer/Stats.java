@@ -1,7 +1,12 @@
 package com.currencylayer;
 
 import java.util.HashMap;
+
+import com.currencylayer.exception.CurrencyNotFoundException;
+import com.currencylayer.exception.DateErrorException;
 import com.currencylayer.parse.JSONParser;
+
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -17,7 +22,7 @@ public class Stats{
 		this.empty = true;
 	}
 
-	public HashMap<String, Double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate)
+	public HashMap<String, Double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate) throws CurrencyNotFoundException, DateErrorException, URISyntaxException
 	{
 		LocalDate limit = startDate.minusDays(1);
 		LocalDate day = endDate;

@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import com.currencylayer.Currency;
 import com.currencylayer.Pair;
 import com.currencylayer.exception.CurrencyNotFoundException;
+import com.currencylayer.exception.DateErrorException;
 
 
 
@@ -30,8 +31,10 @@ public class JSONParser {
 	 * 
 	 * @param code sigla moneta
 	 * @return	oggetto currency corrispondente
+	 * @throws URISyntaxException 
+	 * @throw  DateErrorException 
 	 */
-	public Currency getValuefromApi(String code)  { // GBP EUR
+	public Currency getValuefromApi(String code) throws DateErrorException, URISyntaxException  { // GBP EUR
 		JSONObject obj = JsonFromApi (0,LocalDate.now()); //Prende il JSON object presente sull'endpoint "list"
 		Currency currency = new Currency(code); //istanza dell'oggetto currency con il code corrispondente
 
@@ -45,7 +48,7 @@ public class JSONParser {
 	} //da chiedere se togliere
 
 	public Currency getValuefromFile(String path, String Code)
-			throws IOException{
+			throws IOException, MalformedURLException, URISyntaxException{
 		Currency currency = new Currency(Code);
 		Scanner file_input = new Scanner(new BufferedReader(new FileReader(path)));
 		String str = file_input.nextLine();//Prende l'intero JSON come stringa 
@@ -63,7 +66,7 @@ public class JSONParser {
 	}
 
 // @param nomeFile dove salvare
-public void saveOnFile(String nomeFile,int i ,LocalDate d) {
+public void saveOnFile(String nomeFile,int i ,LocalDate d) throws URISyntaxException {
 	JSONObject obj = JsonFromApi(i,d);
 	try {
 		PrintWriter file_output = new PrintWriter(new BufferedWriter(new FileWriter(nomeFile)));
@@ -76,7 +79,7 @@ public void saveOnFile(String nomeFile,int i ,LocalDate d) {
 
 }
 
-public JSONObject JsonFromApi(int i,LocalDate d) {
+public JSONObject JsonFromApi(int i,LocalDate d)throws CurrencyNotFoundException, DateErrorException, URISyntaxException {
 	JSONObject obj;
 	String url = "http://api.currencylayer.com/"+Endpoint[i] + "?access_key=" + api_key;
 	int year,month,days;
@@ -99,7 +102,7 @@ public JSONObject JsonFromApi(int i,LocalDate d) {
 public String getApi_key() {
 	return api_key;
 }
-public Pair getPairfromApi(String code,LocalDate d) {
+public Pair getPairfromApi(String code,LocalDate d)  throws URISyntaxException, CurrencyNotFoundException {
 	JSONObject obj;
 	JSONObject quotesObj;
 	if(d.equals(LocalDate.now()) || d==null)
@@ -125,13 +128,13 @@ public Pair getPairfromApi(String code,LocalDate d) {
 	return pair;
 }
 
-public Pair getCurrencyfromFile(String path, String Code) {
+public Pair getCurrencyfromFile(String path, String Code) throws  IOException, DateErrorException, CurrencyNotFoundException, MalformedURLException, URISyntaxException{
 	String path1="valuta.json";
 	JSONObject Obj;
 	JSONObject quotesObj;
 	Pair pair = new Pair();
 	Currency currency=new Currency(Code);
-	try {
+	
 		Scanner file_input = new Scanner(new BufferedReader(new FileReader(path)));
 		String str = file_input.nextLine();
 		currency=this.getValuefromFile( path1, Code);
@@ -144,9 +147,7 @@ public Pair getCurrencyfromFile(String path, String Code) {
 		pair.setCode(currency.getCode());
 		pair.setDescription(currency.getDescription());
 		pair.setExchange_rate(reateUSDx);
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
+	
 	return pair;
 }
 
