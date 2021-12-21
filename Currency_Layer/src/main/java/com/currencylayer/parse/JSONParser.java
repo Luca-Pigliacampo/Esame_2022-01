@@ -119,8 +119,10 @@ public Pair getPairfromApi(String code,LocalDate d) {
 		pair.setDescription(currency.getDescription());
 		pair.setExchange_rate(reateUSDx);
 		Thread.sleep(5000);
-	} catch (Exception e) {
+	} catch (InterruptedException e) {
 		e.printStackTrace();
+	} catch (CurrencyNotFoundException e) {
+		throw new CurrencyNotFoundException("La valuta non esiste");
 	}
 	return pair;
 }
