@@ -16,6 +16,7 @@ import java.util.Map;
 import org.json.JSONObject;
 import com.google.gson.Gson;
 
+import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.parse.JSONParser;
 
 public class Conversion {
@@ -25,14 +26,14 @@ public class Conversion {
 	private double result;
 	private double exchange_rate_src_tgt;
 	private String date;
-	
-	
-	
+
+
+
 	public Conversion() {
 		super();
 
 	}
-	
+
 	public String getDate() {
 		return date;
 	}
@@ -69,88 +70,60 @@ public class Conversion {
 	 * @param tgt   la sigla della moneta di arrivo
 	 * @param amount quantità da convertire
 	 */
-	public void conversion(String src,String tgt,double amount) {
+	public void conversion(String src,String tgt,double amount) throws MalformedURLException, URISyntaxException, IOException {
 		this.amount=amount;
 		JSONParser a=new JSONParser();
 		a.saveOnFile("live.json", 1, null);
 		try {
 			this.src=a.getCurrencyfromFile("live.json", src.toUpperCase());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (CurrencyNotFoundException e) {
+			throw new CurrencyNotFoundException("La valuta "+src+" non esiste");
 		}
 		try {
 			this.tgt=a.getCurrencyfromFile("live.json", tgt.toUpperCase());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (CurrencyNotFoundException e) {
+			throw new CurrencyNotFoundException("La valuta "+tgt+" non esiste");
 		}
-			double rateUSDx =this.tgt.getExchange_rate();
-			double rateUSDy =1/this.src.getExchange_rate();
-			this.exchange_rate_src_tgt=rateUSDx*rateUSDy;
-			this.result=this.exchange_rate_src_tgt*this.amount;	
-			
-			 LocalDateTime dat=LocalDateTime.now()
-				      .atZone(ZoneId.of("Europe/Rome"))
-				      .toLocalDateTime();
-			 DateTimeFormatter formatter = DateTimeFormatter.
-		                ofPattern("yyyy-MM-dd",Locale.ITALY).withZone(ZoneId.of("Europe/Rome"));
-			String date=dat.format(formatter);
-			
-	            this.date=date ;
-		
+		double rateUSDx =this.tgt.getExchange_rate();
+		double rateUSDy =1/this.src.getExchange_rate();
+		this.exchange_rate_src_tgt=rateUSDx*rateUSDy;
+		this.result=this.exchange_rate_src_tgt*this.amount;	
+
+		LocalDateTime dat=LocalDateTime.now()
+				.atZone(ZoneId.of("Europe/Rome"))
+				.toLocalDateTime();
+		DateTimeFormatter formatter = DateTimeFormatter.
+				ofPattern("yyyy-MM-dd",Locale.ITALY).withZone(ZoneId.of("Europe/Rome"));
+		String date=dat.format(formatter);
+
+		this.date=date ;
+
 	}
-	public Map<String,Object> conversion(String src,String tgt) {
+	public Map conversion(String src,String tgt) throws IOException, URISyntaxException {
 		this.amount=1;
 		JSONParser a=new JSONParser();
 		a.saveOnFile("live.json", 1, LocalDate.now());
 		try {
 			this.src=a.getCurrencyfromFile("live.json", src.toUpperCase());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (CurrencyNotFoundException e) {
+			throw new CurrencyNotFoundException("La valuta "+src+" non esiste");
 		}
 		try {
 			this.tgt=a.getCurrencyfromFile("live.json", tgt.toUpperCase());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}  catch (CurrencyNotFoundException e) {
+			throw new CurrencyNotFoundException("La valuta "+tgt+" non esiste");
 		}
-			double rateUSDx =this.tgt.getExchange_rate();
-			double rateUSDy =1/this.src.getExchange_rate();
-			this.exchange_rate_src_tgt=rateUSDx*rateUSDy;
-			Map <String, Object> map = new LinkedHashMap<String,Object>();
-			Currency currencyA=new Currency(this.src.getCode(), this.src.getDescription());
-			Currency currencyB = new Currency(this.tgt.getCode(), this.tgt.getDescription());
-			map.put("currency1", currencyA);
-			map.put("currency2", currencyB);
-			map.put("exchange_rate", this.exchange_rate_src_tgt);
-			return map;
-			
+		double rateUSDx =this.tgt.getExchange_rate();
+		double rateUSDy =1/this.src.getExchange_rate();
+		this.exchange_rate_src_tgt=rateUSDx*rateUSDy;
+		Map <String, Object> map = new LinkedHashMap<String,Object>();
+		Currency currencyA=new Currency(this.src.getCode(), this.src.getDescription());
+		Currency currencyB = new Currency(this.tgt.getCode(), this.tgt.getDescription());
+		map.put("currency1", currencyA);
+		map.put("currency2", currencyB);
+		map.put("exchange_rate", this.exchange_rate_src_tgt);
+		return map;
+
 	}
 	//metodo da controllare con conversion(String src,String tgt) per sapere quale conviene usare
 	public Map<String,Object> JsonModel(String src,String tgt){
@@ -201,6 +174,6 @@ public class Conversion {
 	}
 
 
-	
+
 
 }
