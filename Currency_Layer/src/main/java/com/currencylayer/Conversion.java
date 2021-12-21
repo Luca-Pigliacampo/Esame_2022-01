@@ -14,6 +14,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import com.currencylayer.parse.JSONParser;
 
