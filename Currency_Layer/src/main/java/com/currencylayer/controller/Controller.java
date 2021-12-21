@@ -61,7 +61,7 @@ public class Controller {
 		
 	}
 	@GetMapping (value="/live", params= {"src", "tgt"})
-	public Map<Sting,Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
+	public Map<String,Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
 		Conversion conv=new Conversion();
 		return conv.conversion(src,tgt);
 		
