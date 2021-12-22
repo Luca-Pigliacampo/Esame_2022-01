@@ -70,13 +70,21 @@ public class Stats{
 		return res;
 	}
 
+	private double unit(String base, int day)
+	{
+		if(base.toUpperCase().equals("USD"))
+			return 1;
+		else
+			return 1/this.days.get(day).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+	}
+
 	private double average(String currency, String base)
 	{
 		double acc = 0;
 		double unit;
 		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				unit = this.unit(base, i);
 				acc += (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 			}
 		}
@@ -89,7 +97,7 @@ public class Stats{
 		double tmp;
 		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				unit = this.unit(base, i);
 				tmp = (((1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit) - avg);
 				acc += (tmp * tmp);
 			}
@@ -102,7 +110,7 @@ public class Stats{
 		double unit;
 		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				unit = this.unit(base, i);
 				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 				if(i == 0 || tmp < acc)
 					acc = tmp;
@@ -116,7 +124,7 @@ public class Stats{
 		double unit;
 		for(int i = 0; i < days.size(); i++){
 			if(base.length() == 3 && currency.length() == 3){
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				unit = this.unit(base, i);
 				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 				if(i == 0 || tmp > acc)
 					acc = tmp;
