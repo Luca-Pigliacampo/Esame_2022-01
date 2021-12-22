@@ -83,8 +83,8 @@ public class Controller {
 						moneta,
 						bas,
 						opt,
-						LocalDate.parse(std),
-						LocalDate.parse(end)));
+						LocalDate.parse(std.trim()),
+						LocalDate.parse(end.trim())));
 
 			try {
 				Thread.sleep(1000);
