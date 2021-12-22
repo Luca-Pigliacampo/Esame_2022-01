@@ -75,7 +75,7 @@ public class Stats{
 				acc += (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 			}
 		}
-		return acc/7;
+		return acc/this.days.size();
 	}
 	private double variance(String currency, String base){
 		double avg = this.average(currency, base);
@@ -89,7 +89,7 @@ public class Stats{
 				acc += (tmp * tmp);
 			}
 		}
-		return acc/7;
+		return acc/this.days.size();
 	}
 	private double minimum(String currency, String base){
 		double tmp;
