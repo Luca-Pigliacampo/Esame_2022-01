@@ -1,4 +1,5 @@
 package com.currencylayer.exception;
+
 import java.time.ZonedDateTime;
 
 
@@ -33,7 +34,7 @@ public class Handler {
 	}
 
 	@ExceptionHandler (value= {AmountFormatException.class})
-	public ResponseEntity<ExceptionModel> handleAmountFormaatException(CurrencyNotFoundException e){
+	public ResponseEntity<ExceptionModel> handleAmountFormaatException(AmountFormatException e){
 
 		ExceptionModel er=new ExceptionModel (e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
 
