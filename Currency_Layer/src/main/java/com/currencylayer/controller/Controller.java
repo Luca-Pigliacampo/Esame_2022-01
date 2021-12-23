@@ -1,5 +1,7 @@
 package com.currencylayer.controller;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import com.currencylayer.Conversion;
 import com.currencylayer.Currency;
 import com.currencylayer.Pair;
+import com.currencylayer.exception.AmountFormatException;
 import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.exception.DateErrorException;
 import com.currencylayer.exception.ExceptionModel;
@@ -29,7 +32,7 @@ import com.currencylayer.Stats;
 public class Controller {
 
 	@GetMapping(value="/conversion", params= {"src","tgt","amount"})
-	public ResponseEntity<Conversion[]> getvalue(@RequestParam String[] src, @RequestParam String[] tgt,@RequestParam double amount) throws URISyntaxException {
+	public ResponseEntity<Conversion[]> getvalue(@RequestParam String[] src, @RequestParam String[] tgt,@RequestParam double amount) throws URISyntaxException, MalformedURLException, IOException {
 		Conversion[] conv=new Conversion[src.length*tgt.length];
 		int k=0;
 		
@@ -45,7 +48,7 @@ public class Controller {
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				} 
 			}
 		}
 
@@ -53,7 +56,7 @@ public class Controller {
 
 	}
 	@GetMapping (value="/liveExchange", params={"src"})
-	public ResponseEntity<Pair> getLivePair (@RequestParam String src) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
+	public ResponseEntity<Pair> getLivePair (@RequestParam String src) throws DateErrorException, URISyntaxException, CurrencyNotFoundException, MalformedURLException, IOException{
 		JSONParser pairObj = new JSONParser();
 		Pair pair=pairObj.getPairfromApi(src, LocalDate.now());
 		
@@ -61,9 +64,10 @@ public class Controller {
 		
 	}
 	@GetMapping (value="/live", params= {"src", "tgt"})
-	public Map<String,Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException{
+	public Map<String,Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException, IOException{
 		Conversion conv=new Conversion();
 		return conv.conversion(src,tgt);
+
 		
 	}
 
@@ -74,7 +78,7 @@ public class Controller {
 			@RequestParam String bas,
 			@RequestParam String[] opt,
 			@RequestParam String std,
-			@RequestParam String end)
+			@RequestParam String end) throws CurrencyNotFoundException, DateErrorException, URISyntaxException
 	{
 		HashMap<String,HashMap<String,Double>> res = new HashMap<String,HashMap<String,Double>>();
 		Stats stObj = new Stats();

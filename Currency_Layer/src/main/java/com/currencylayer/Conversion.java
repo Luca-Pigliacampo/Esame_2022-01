@@ -9,13 +9,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONObject;
 import com.google.gson.Gson;
-
+import com.currencylayer.exception.AmountFormatException;
 import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.parse.JSONParser;
 
@@ -71,6 +72,7 @@ public class Conversion {
 	 * @param amount quantità da convertire
 	 */
 	public void conversion(String src,String tgt,double amount) throws MalformedURLException, URISyntaxException, IOException {
+		
 		this.amount=amount;
 		JSONParser a=new JSONParser();
 		a.saveOnFile("live.json", 1, null);
@@ -84,10 +86,13 @@ public class Conversion {
 		} catch (CurrencyNotFoundException e) {
 			throw new CurrencyNotFoundException("La valuta "+tgt+" non esiste");
 		}
+		
 		double rateUSDx =this.tgt.getExchange_rate();
 		double rateUSDy =1/this.src.getExchange_rate();
 		this.exchange_rate_src_tgt=rateUSDx*rateUSDy;
+		if (amount>0)
 		this.result=this.exchange_rate_src_tgt*this.amount;	
+		else throw new AmountFormatException("Inserisci un valore positivo");
 
 		LocalDateTime dat=LocalDateTime.now()
 				.atZone(ZoneId.of("Europe/Rome"))
@@ -99,7 +104,7 @@ public class Conversion {
 		this.date=date ;
 
 	}
-	public Map conversion(String src,String tgt) throws IOException, URISyntaxException {
+	public Map conversion(String src,String tgt) throws IOException, URISyntaxException, CurrencyNotFoundException {
 		this.amount=1;
 		JSONParser a=new JSONParser();
 		a.saveOnFile("live.json", 1, LocalDate.now());
@@ -126,7 +131,7 @@ public class Conversion {
 
 	}
 	//metodo da controllare con conversion(String src,String tgt) per sapere quale conviene usare
-	public Map<String,Object> JsonModel(String src,String tgt){
+	public Map<String,Object> JsonModel(String src,String tgt) throws MalformedURLException, URISyntaxException, IOException{
 		Conversion b=new Conversion();
 		JSONParser a=new JSONParser();
 		b.conversion(src, tgt, 1);
