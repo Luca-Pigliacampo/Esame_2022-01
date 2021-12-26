@@ -1,25 +1,30 @@
 package com.currencylayer;
 
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Vector;
+import java.util.stream.Stream;
 
-import com.currencylayer.exception.CurrencyNotFoundException;
-import com.currencylayer.exception.DateErrorException;
 import com.currencylayer.parse.JSONParser;
 
-import java.net.URISyntaxException;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.time.LocalDate;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Stats{
-
-	private boolean empty;
+public class Stats implements StatsInterface{
 
 	private ArrayList<JSONObject> days = new ArrayList<JSONObject>();
 
+	private String[] help;
 	public Stats()
 	{
-		this.empty = true;
+		super();
 	}
 
 	/**
@@ -29,9 +34,10 @@ public class Stats{
 	 * @param std start date of the measurements
 	 * @param end end date of the measurements
 	 */
-	public HashMap<String, Double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate) throws CurrencyNotFoundException, DateErrorException, URISyntaxException
+	@Override
+	public HashMap<String, Double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate)
 	{
-		LocalDate limit = startDate.minusDays(1);
+		/*LocalDate limit = startDate.minusDays(1);
 		LocalDate day = endDate;
 		JSONParser jp = new JSONParser();
 		if(this.empty){
@@ -50,86 +56,139 @@ public class Stats{
 				}
 			}
 			this.empty = false;
+		}*/
+		Scanner file_input = null ;
+		try {
+			file_input = new Scanner(new BufferedReader(new FileReader("WEEK.json")));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		HashMap<String, Double> res = new HashMap();
+		String str=file_input.nextLine();
+		JSONArray main=new JSONArray(str);
+		for(int i=0;i<7;i++) {
+			days.add(main.getJSONObject(i));
+		}
+		Object[] news=startDate.datesUntil(endDate.plusDays(1)).toArray();
+		this.help=new String[news.length];
+		for (int i=0;i<help.length;i++) help[i]=news[i].toString();
+		
+	
+
+		
+		
+		HashMap<String, Double> res = new HashMap<String, Double>();
+		if(endDate.compareTo(startDate)>0) {
 		for(String req : options){
 			if(req.equals("average")){
-				res.put("average", new Double(this.average(currency, base)));
+				res.put("average", Double.valueOf(this.average(currency, base)));
 			}
 			if(req.equals("variance")){
-				res.put("variance", new Double(this.variance(currency, base)));
+				res.put("variance", Double.valueOf(this.variance(currency, base)));
 			}
 			if(req.equals("minimum")){
-				res.put("minimum", new Double(this.minimum(currency, base)));
+				res.put("minimum", Double.valueOf(this.minimum(currency, base)));
 			}
 			if(req.equals("maximum")){
-				res.put("maximum", new Double(this.maximum(currency, base)));
+				res.put("maximum", Double.valueOf(maximum(currency, base)));
 			}
 		}
+		
+		}
+		else res.put("error", null);
 
-		return res;
+				return res;
 	}
 
-	private double unit(String base, int day)
-	{
-		if(base.toUpperCase().equals("USD"))
-			return 1;
-		else
-			return 1/this.days.get(day).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-	}
-
-	private double average(String currency, String base)
+	@Override
+	public double average(String currency, String base)
 	{
 		double acc = 0;
 		double unit;
-		for(int i = 0; i < days.size(); i++){
-			if(base.length() == 3 && currency.length() == 3){
-				unit = this.unit(base, i);
-				acc += (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
+		int i=0;
+		int j=0;
+		for(String date:this.help) {
+			for(i=0;i<days.size();i++) {
+			if(days.get(i).getString("date").equals(date)) {
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase());
+				acc += (days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase()))*unit;
+				j++;
+				
+			}
+				
 			}
 		}
-		return acc/this.days.size();
+				
+		
+		return acc/j;
 	}
-	private double variance(String currency, String base){
+	@Override
+	public double variance(String currency, String base){
 		double avg = this.average(currency, base);
 		double acc = 0;
 		double unit;
 		double tmp;
-		for(int i = 0; i < days.size(); i++){
-			if(base.length() == 3 && currency.length() == 3){
-				unit = this.unit(base, i);
+		int i=0;
+		int j=0;
+		for(String date:this.help) {
+			for(i=0;i<days.size();i++) {
+			if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
 				tmp = (((1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit) - avg);
 				acc += (tmp * tmp);
+				j++;
+				
+			}
+				
 			}
 		}
-		return acc/this.days.size();
+				
+			
+	
+		return acc/j;
 	}
-	private double minimum(String currency, String base){
+	@Override
+	public double minimum(String currency, String base){
 		double tmp;
 		double acc=0;
 		double unit;
-		for(int i = 0; i < days.size(); i++){
-			if(base.length() == 3 && currency.length() == 3){
-				unit = this.unit(base, i);
+		int i=0;
+		int j=0;
+		for(String date:this.help) {
+			for(i=0;i<days.size();i++) {
+			if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
 				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
-				if(i == 0 || tmp < acc)
+				if(j == 0 || tmp < acc) {
 					acc = tmp;
+					j++;
+				}
 			}
+		
+		}
 		}
 		return acc;
 	}
-	private double maximum(String currency, String base){
+	@Override
+	public double maximum(String currency, String base){
 		double tmp;
 		double acc=0;
 		double unit;
-		for(int i = 0; i < days.size(); i++){
-			if(base.length() == 3 && currency.length() == 3){
-				unit = this.unit(base, i);
+		int i=0;
+		for(String date:this.help) {
+			for(i=0;i<days.size();i++) {
+			if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
 				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
 				if(i == 0 || tmp > acc)
 					acc = tmp;
+				
 			}
+		
+		}
 		}
 		return acc;
 	}
+
+
 }
