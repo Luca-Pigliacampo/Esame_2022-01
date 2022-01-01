@@ -35,7 +35,7 @@ public class Stats implements StatsInterface{
 	 * @param end end date of the measurements
 	 */
 	@Override
-	public HashMap<String, Double> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate)
+	public HashMap<String, Object> createMap(String currency, String base, String[] options, LocalDate startDate, LocalDate endDate)
 	{
 		/*LocalDate limit = startDate.minusDays(1);
 		LocalDate day = endDate;
@@ -77,7 +77,7 @@ public class Stats implements StatsInterface{
 
 		
 		
-		HashMap<String, Double> res = new HashMap<String, Double>();
+		HashMap<String, Object> res = new HashMap<String, Double>();
 		if(endDate.compareTo(startDate)>0) {
 		for(String req : options){
 			if(req.equals("average")){
@@ -188,6 +188,19 @@ public class Stats implements StatsInterface{
 		}
 		}
 		return acc;
+	}
+	@Override
+	public ArrayList<Double> fluctuation-percent(String currency, String base){
+		double value;
+		int count = 0;
+		double unit;
+		for(String date : this.help) {
+			for(i=0;i<days.size();i++) {
+				if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
+					
+				}
+			}
+		}
 	}
 
 
