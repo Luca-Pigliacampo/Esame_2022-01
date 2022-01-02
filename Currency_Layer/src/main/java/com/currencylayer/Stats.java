@@ -92,6 +92,9 @@ public class Stats implements StatsInterface{
 			if(req.equals("maximum")){
 				res.put("maximum", Double.valueOf(maximum(currency, base)));
 			}
+			if(req.equals("fluct-per")){
+				res.put("fluct-per", fluctuation-percent(currency, base));
+			}
 		}
 		
 		}
@@ -191,15 +194,24 @@ public class Stats implements StatsInterface{
 	@Override
 	public ArrayList<Double> fluctuation-percent(String currency, String base){
 		double value;
+		double prev;
 		int count = 0;
 		double unit;
+		ArrayList<Double> res = new ArrayList<Double>();
 		for(String date : this.help) {
 			for(i=0;i<days.size();i++) {
 				if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
-					
+				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				value = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
+				if(count > 0)
+					res.add(Double.valueOf((value-prev)*100/prev));
+				else
+					res.add(Double.valueOf(value));
+				prev = value;
 				}
 			}
 		}
+		return res;
 	}
 
 
