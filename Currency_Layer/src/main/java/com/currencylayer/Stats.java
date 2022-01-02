@@ -110,15 +110,14 @@ public class Stats implements StatsInterface{
 		for(String date:this.help) {
 			for(i=0;i<days.size();i++) {
 			if(days.get(i).getString("date").equals(date)) {
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase());
-				acc += (days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase()))*unit;
+				unit = days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
+				acc += 1/((days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit);
 				j++;
-				
 			}
 				
 			}
 		}
-				
+
 		
 		return acc/j;
 	}
