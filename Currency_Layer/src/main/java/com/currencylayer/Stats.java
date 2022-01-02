@@ -77,7 +77,7 @@ public class Stats implements StatsInterface{
 
 		
 		
-		HashMap<String, Object> res = new HashMap<String, Double>();
+		HashMap<String, Object> res = new HashMap<String, Object>();
 		if(endDate.compareTo(startDate)>0) {
 		for(String req : options){
 			if(req.equals("average")){
@@ -196,13 +196,13 @@ public class Stats implements StatsInterface{
 	}
 	@Override
 	public ArrayList<Double> fluctuation(String currency, String base, boolean percent){
-		double value;
-		double prev;
+		double value = 0;
+		double prev = 0;
 		int count = 0;
 		double unit;
 		ArrayList<Double> res = new ArrayList<Double>();
 		for(String date : this.help) {
-			for(i=0;i<days.size();i++) {
+			for(int i=0;i<days.size();i++) {
 				if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
 				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
 				value = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
@@ -213,6 +213,7 @@ public class Stats implements StatsInterface{
 				prev = value;
 				}
 			}
+			count++;
 		}
 		return res;
 	}

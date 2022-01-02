@@ -2,6 +2,7 @@ package com.currencylayer;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public interface StatsInterface {
 
@@ -12,7 +13,7 @@ public interface StatsInterface {
 	 * @param std start date of the measurements
 	 * @param end end date of the measurements
 	 */
-	HashMap<String, Double> createMap(String currency, String base, String[] options, LocalDate startDate,
+	HashMap<String, Object> createMap(String currency, String base, String[] options, LocalDate startDate,
 			LocalDate endDate);
 
 	double average(String currency, String base);
@@ -23,4 +24,5 @@ public interface StatsInterface {
 
 	double maximum(String currency, String base);
 
+	public ArrayList<Double> fluctuation(String currency, String base, boolean percent);
 }

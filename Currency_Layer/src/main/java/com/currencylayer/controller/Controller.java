@@ -73,14 +73,14 @@ public class Controller {
 
 
 	@GetMapping(value="/stat", params={"cur","bas","opt","std","end"})
-	public ResponseEntity<HashMap<String,HashMap<String,Double>>> getStats(
+	public ResponseEntity<HashMap<String,HashMap<String,Object>>> getStats(
 			@RequestParam String[] cur,
 			@RequestParam String bas,
 			@RequestParam String[] opt,
 			@RequestParam String std,
 			@RequestParam String end) throws CurrencyNotFoundException, DateErrorException, URISyntaxException
 	{
-		HashMap<String,HashMap<String,Double>> res = new HashMap<String,HashMap<String,Double>>();
+		HashMap<String,HashMap<String,Object>> res = new HashMap<String,HashMap<String,Object>>();
 		Stats stObj = new Stats();
 		for(String moneta : cur){
 			res.put(moneta, stObj.createMap(
