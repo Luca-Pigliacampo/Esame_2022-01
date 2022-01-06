@@ -29,7 +29,7 @@ public class Stats implements StatsInterface{
 
 	/**
 	 * @param bas currency to use as unit of measurement
-	 * @param opt name of the informations to get in a comma separated list, accepted values: average,variance,minimum,maximum
+	 * @param opt name of the informations to get in a comma separated list, accepted values: average,variance,minimum,maximum,fluct-per,fluct-abs
 	 * @param cur currency to get statistics about in a comma separated list
 	 * @param std start date of the measurements
 	 * @param end end date of the measurements
@@ -106,6 +106,9 @@ public class Stats implements StatsInterface{
 				return res;
 	}
 
+	/**
+	 * computes average value of a currency over the given time frame
+	 */
 	@Override
 	public double average(String currency, String base)
 	{
@@ -127,6 +130,9 @@ public class Stats implements StatsInterface{
 		
 		return acc/j;
 	}
+	/**
+	 * computes variance of a currency's value over the given time frame
+	 */
 	@Override
 	public double variance(String currency, String base){
 		double avg = this.average(currency, base);
@@ -152,6 +158,9 @@ public class Stats implements StatsInterface{
 	
 		return acc/j;
 	}
+	/**
+	 * finds the minimum value reached by the currency within the given timeframe
+	 */
 	@Override
 	public double minimum(String currency, String base){
 		double tmp;
@@ -174,6 +183,9 @@ public class Stats implements StatsInterface{
 		}
 		return acc;
 	}
+	/**
+	 * finds the maximum value reached by the currency within the given timeframe
+	 */
 	@Override
 	public double maximum(String currency, String base){
 		double tmp;
@@ -194,6 +206,13 @@ public class Stats implements StatsInterface{
 		}
 		return acc;
 	}
+	/**
+	 * lists fluctuations of the given currency's value.
+	 *
+	 * the first element of the array is the value at the start.
+	 * the other elements are the fluctuations of value,
+	 * expressed either as absolute values or percentages
+	 */
 	@Override
 	public ArrayList<Double> fluctuation(String currency, String base, boolean percent){
 		double value = 0;
