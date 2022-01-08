@@ -15,14 +15,17 @@
 
   - [Rotte](#rotte)
 
+  - [Eccezzioni](#Eccezioni )
+
   - [Autori](#autori)
 
-
+<a name="introduzione"></a>
 ## *Introduzione*
   <a>Lo scopo del progetto è quello di creare un programma Currency_Layer in grado di interagire con l' API di [Currencylayer](https://currencylayer.com/).
   Si concentra principalmente sul fornire statistiche riguardo alcune monete in un range di giorni definito dall'utente. 
   Prevede inoltre alcune rotte aggiuntive dedicate alla conversione da    una o più valute ad altre valute  scelte dall'utente.</a>
   
+  <a name="download"></a>
  ## *Download*
   <a>CurencyLayer è installabile dal Prompt dei Comandi digitando:  
    ```
@@ -30,11 +33,13 @@
    ```
   </a>
   
+  <a name="configurazione"></a>
   ## *Configurazione*
   Per accedere al nostro servizio è necessario modificare la variabile ```api_key``` in [JSONParser.java](https://github.com/Luca-Pigliacampo/Esame_2022-01/blob/main/Currency_Layer/src/main/java/com/currencylayer/parse/JSONParser.java).
 Si può ottenere una API key gratuitamente accedendo alla pagina di [Currencylayer](https://currencylayer.com/).
 Infine basterà avviare il web-server eseguendo [CurrencyLayerApplication.java](https://github.com/Luca-Pigliacampo/Esame_2022-01/blob/main/Currency_Layer/src/main/java/com/currencylayer/CurrencyLayerApplication.java).
   
+  <a name="rotte"></a>
   ## *Rotte*
   Le richieste che l'utente può effettuare tramite Postman devono essere all'indirizzo
 ```
@@ -48,19 +53,12 @@ N° | Tipo | Rotta | Descrizione
 [2](#2) | ` GET ` | `/live?src=EUR&tgt=GBP` | *restituisce il tasso di conversione tra le valute scelte.*
 [3](#3) | ` GET ` | `/stat?cur=EUR&bas=GBP&opt=average,minimum,variance,maximium&std=2021-12-22&end=2021-12-24` | *restituisce le statistiche in base al range in giorni definito dall'utente sull'andamento del valore di una valuta come media e varianza delle stesse e numero minimo/massimo/medio di valore. Il range in giorni deve essere compreso tra il ```2021-12-24``` e il ```2021-12-18```.*
   
-  - ## Come effettuare richieste? 
+  - ## Come può l'utente effettuare richieste? Cosa riceverà in risposta? 
 
 Basta avviare il programma come applicazione SpringBoot, assicurarsi di avere Postman e seguire le seguenti istruzioni.
 
 Ora illustreremo alcuni esempi su cosa dare in richiesta e cosa dovete aspettarvi in risposta.
 
-PS:In caso di inserimento di alcuni parametri in maniera errata si riceverà
-una eccezzione che indicherà la possibile soluzione dell'errore.
-*Ad esempio nel  caso in cui l'utente inserisce una valuta inesistente  viene generata un'eccezione del tipo ***CurrencyNotFoundException*** che restituisce un messaggio di questo tipo:*
- 
-```
-La valuta "+src+" non esiste
-```
 <a name="1"></a>
 ## 1.   /conversion?src= &tgt= &amount=
 
@@ -93,12 +91,45 @@ La terza rotta è la rotta delle statistiche e prevede i seguenti parametri:
  Il risultato è un JSONObject contenente le informazioni sulla valuta scelta e sulla statistica scelta in ***opt***.
  
  ![alt_text](https://github.com/Luca-Pigliacampo/Esame_2022-01/blob/readme/Images/rotta_stats.png?raw=true)
+<a name="Eccezzioni"></a>
+## *Eccezzioni*
+Il programma può lanciare anche eccezioni personalizzate
+> Eccezioni personalizzate:
+- **AmountFormatException.java**
+  
+    Viene richiamata quando il programma riconosce che l'amount è negativo
+  Viene visualizzato il seguente messaggio di errore:
+```
+    {
+    "message": "Inserisci un valore positivo",
+    "httpStat": "BAD_REQUEST",
+    "time": "2022-01-08T12:09:25.2028348+01:00"
+     }
+```
+- **CurrencyNotFoundException.java**
+  
+   
+ Viene richiamata quando il programma ottiene in input una valita inesistente.
+Viene visualizzato il seguente messaggio di errore:
+```
+{
+    "message": "La valuta CAI non esiste",
+    "httpStat": "BAD_REQUEST",
+    "time": "2022-01-08T12:07:18.8891748+01:00"
+}
+```
+- **DateErrorException.java**
+Viene richiamata quando il programma ottiene una data in un formato errato.
+Viene visualizzato il seguente messaggio di errore:
+```
+
+```
+
 
 	
 
 
-
-  
+<a name="autori"></a>
   ## *Autori*
   Nome |  Contributo
   ---- |  -----------
