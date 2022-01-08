@@ -15,8 +15,6 @@
 
   - [Rotte](#rotte)
 
-  - [Filtri](#filtri)
-
   - [Autori](#autori)
 
 
