@@ -50,7 +50,7 @@ N° | Tipo | Rotta | Descrizione
 [2](#2) | ` GET ` | `/live?src=EUR&tgt=GBP` | *restituisce il tasso di conversione tra le valute scelte.*
 [3](#3) | ` GET ` | `/stat?cur=EUR&bas=GBP&opt=average,minimum,variance,maximium&std=2021-12-22&end=2021-12-24` | *restituisce le statistiche in base al range in giorni definito dall'utente sull'andamento del valore di una valuta come media e varianza delle stesse e numero minimo/massimo/medio di valore. Il range in giorni deve essere compreso tra il ```2021-12-24``` e il ```2021-12-18```.*
   
-  - ## Come può l'utente effettuare richieste? Cosa riceverà in risposta? 
+  - ## Come effettuare richieste? 
 
 Basta avviare il programma come applicazione SpringBoot, assicurarsi di avere Postman e seguire le seguenti istruzioni.
 
