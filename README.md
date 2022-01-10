@@ -27,10 +27,20 @@
   
   <a name="download"></a>
  ## *Download*
-  <a>CurencyLayer è installabile dal Prompt dei Comandi digitando:  
+  <a>Puoi scaricare il codice dal Prompt dei Comandi digitando:  
    ```
    git clone https://github.com/Luca-Pigliacampo/Esame_2022-01.git
    ```
+  </a>
+
+  <a>Per ottenere l'eseguibile in formato jar bisogna poi:
+   ```
+   cd Esame_2022-01/Currency_Layer # entrare nella directory del progetto
+   ./mvnw package                  # compilare e creare il file eseguibile
+   ```
+   a questo punto il file jar dovrebbe essere stato creato nella cartella `target` e potrà essere eseguito con:
+   ```
+   java -jar <file>
   </a>
   
   <a name="configurazione"></a>
