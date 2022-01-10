@@ -55,6 +55,8 @@
    java -jar <file>
    ```
   </a>
+ ## *Installazione*(Mac)
+  <a>Dovrebbero andare bene le istruzioni per linux, ma non è stato verificato</a>
 
   <a name="configurazione"></a>
   ## *Configurazione*
