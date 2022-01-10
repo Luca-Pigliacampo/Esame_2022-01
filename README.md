@@ -44,6 +44,7 @@
    java -jar <file>
    ```
   </a>
+
  ## *Installazione*(Windows)
   <a>Per avere l'eseguibile in formato jar su Windows invece:
    ```
@@ -55,6 +56,7 @@
    java -jar <file>
    ```
   </a>
+
  ## *Installazione*(Mac)
   <a>Dovrebbero andare bene le istruzioni per linux, ma non è stato verificato</a>
 
