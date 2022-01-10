@@ -33,7 +33,8 @@
    ```
   </a>
 
-  <a>Per ottenere l'eseguibile in formato jar bisogna poi:
+ ## *Installazione*(Linux) 
+  <a>Per ottenere l'eseguibile in formato jar su un sistema basato su GNU/Linux bisogna poi:
    ```
    cd Esame_2022-01/Currency_Layer # entrare nella directory del progetto
    ./mvnw package                  # compilare e creare il file eseguibile
@@ -43,7 +44,18 @@
    java -jar <file>
    ```
   </a>
-  
+ ## *Installazione*(Windows)
+  <a>Per avere l'eseguibile in formato jar su Windows invece:
+   ```
+   cd Esame_2022-01\Currency_Layer # entrare nella directory del progetto
+   .\mvnw.cmd                      # compilare e creare l'eseguibile
+   ```
+   ora il file jar si trova nella cartella `target` e può essere eseguito con:
+   ```
+   java -jar <file>
+   ```
+  </a>
+
   <a name="configurazione"></a>
   ## *Configurazione*
   Per accedere al nostro servizio è necessario modificare la variabile ```api_key``` in [JSONParser.java](https://github.com/Luca-Pigliacampo/Esame_2022-01/blob/main/Currency_Layer/src/main/java/com/currencylayer/parse/JSONParser.java).
