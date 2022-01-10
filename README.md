@@ -41,6 +41,7 @@
    a questo punto il file jar dovrebbe essere stato creato nella cartella `target` e potrà essere eseguito con:
    ```
    java -jar <file>
+   ```
   </a>
   
   <a name="configurazione"></a>
