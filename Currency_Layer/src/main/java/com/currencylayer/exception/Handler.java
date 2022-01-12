@@ -41,4 +41,13 @@ public class Handler {
 		return new ResponseEntity<>(er, HttpStatus.BAD_REQUEST);
 
 	}
+	
+		@ExceptionHandler (value= {SameCurrencyException.class})
+	public ResponseEntity<ExceptionModel> handleSameCurrencyException(SameCurrencyException e){
+
+		ExceptionModel er=new ExceptionModel (e.getMessage(), HttpStatus.BAD_REQUEST, ZonedDateTime.now());
+
+		return new ResponseEntity<>(er, HttpStatus.BAD_REQUEST);
+
+	}
 }
