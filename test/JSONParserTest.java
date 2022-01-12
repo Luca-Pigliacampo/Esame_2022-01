@@ -2,28 +2,30 @@ package com.currencylayer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.time.LocalDate;
+
+import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+import com.currencylayer.exception.CurrencyNotFoundException;
+import com.currencylayer.exception.DateErrorException;
+import com.currencylayer.parse.JSONParser;
 
 class JSONParserTest {
 
 	@Test
-	void testGetValuefromFile() {
-		fail("Not yet implemented");
-	}
+	void testGetValuefromFile() throws MalformedURLException, CurrencyNotFoundException, IOException, URISyntaxException {
+		JSONParser jj=new JSONParser();
 
-	@Test
-	void testJsonFromApi() {
-		fail("Not yet implemented");
-	}
+		Currency curr=new Currency("EUR", "Euro");
 
-	@Test
-	void testGetPairfromApi() {
-		fail("Not yet implemented");
+		assertEquals(jj.getValuefromApi("EUR"), curr, "TEST FALLITO");
 	}
-
-	@Test
-	void testGetCurrencyfromFile() {
-		fail("Not yet implemented");
+	@AfterEach
+	void tearDown() {
 	}
-
 }
