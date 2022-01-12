@@ -93,7 +93,9 @@ public class Conversion {
 		if (amount>0)
 		this.result=this.exchange_rate_src_tgt*this.amount;	
 		else throw new AmountFormatException("Inserisci un valore positivo");
-
+		if (src.equals(tgt)) {
+			throw new SameCurrencyException ("Non puoi inserire due valute uguali!");
+		}
 		LocalDateTime dat=LocalDateTime.now()
 				.atZone(ZoneId.of("Europe/Rome"))
 				.toLocalDateTime();
@@ -121,6 +123,9 @@ public class Conversion {
 		double rateUSDx =this.tgt.getExchange_rate();
 		double rateUSDy =1/this.src.getExchange_rate();
 		this.exchange_rate_src_tgt=rateUSDx*rateUSDy;
+		if (src.equals(tgt)) {
+			throw new SameCurrencyException ("Non puoi inserire due valute uguali!");
+		}
 		Map <String, Object> map = new LinkedHashMap<String,Object>();
 		Currency currencyA=new Currency(this.src.getCode(), this.src.getDescription());
 		Currency currencyB = new Currency(this.tgt.getCode(), this.tgt.getDescription());
