@@ -25,6 +25,17 @@ class JSONParserTest {
 
 		assertEquals(jj.getValuefromApi("EUR"), curr, "TEST FALLITO");
 	}
+	
+		@Test 
+	void testPairFromApi() throws MalformedURLException, URISyntaxException, IOException {
+		JSONParser j2=new JSONParser();
+		Pair pair=new Pair("EUR", "USD");
+		
+		System.out.println(j2.getPairfromApi("EUR", LocalDate.now()));
+		
+		assertEquals(j2.getPairfromApi("EUR", LocalDate.now()), pair, " TEST FALLITO ");
+	}
+	
 	@AfterEach
 	void tearDown() {
 	}
