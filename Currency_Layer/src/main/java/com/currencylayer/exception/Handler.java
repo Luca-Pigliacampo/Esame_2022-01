@@ -28,7 +28,7 @@ public class Handler {
 	/**
 	 * 
 	 * @param e is the exception type handled
-	 * @return a ResponseEntity with the personalized personalized
+	 * @return a ResponseEntity with the personalized parameters
 	 *
 	 */
 	
