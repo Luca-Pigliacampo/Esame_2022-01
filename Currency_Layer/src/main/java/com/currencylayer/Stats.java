@@ -6,11 +6,13 @@ import java.util.Vector;
 import java.util.stream.Stream;
 
 import com.currencylayer.parse.JSONParser;
+import com.currencylayer.Pair;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +21,7 @@ import java.util.Arrays;
 
 public class Stats implements StatsInterface{
 
-	private ArrayList<JSONObject> days = new ArrayList<JSONObject>();
+	private ArrayList<String> days = new ArrayList<String>();
 
 	private String[] help;
 	public Stats()
@@ -56,7 +58,7 @@ public class Stats implements StatsInterface{
 				}
 			}
 			this.empty = false;
-		}*/
+		}
 		Scanner file_input = null ;
 		try {
 			file_input = new Scanner(new BufferedReader(new FileReader("WEEK.json")));
@@ -72,7 +74,13 @@ public class Stats implements StatsInterface{
 		Object[] news=startDate.datesUntil(endDate.plusDays(1)).toArray();
 		this.help=new String[news.length];
 		for (int i=0;i<help.length;i++) help[i]=news[i].toString();
-		
+	*/	
+		LocalDate day = startDate;
+		LocalDate limit = startDate.plusDays(1);
+
+		while(! day.equals(limit)){
+			this.days.add("week/"+day.format(DateTimeFormatter.ISO_LOCAL_DATE));
+		}
 	
 
 		
@@ -106,26 +114,29 @@ public class Stats implements StatsInterface{
 				return res;
 	}
 
+	double curValue(String currency, String base, String day)
+	{
+		JSONParser parser = new JSONParser();
+		double unit = 1/parser.getCurrencyfromFile(day, base).getExchange_rate();
+		double value = (1/parser.getCurrencyfromFile(day, currency).getExchange_rate())/unit;
+		return value;
+	}
+
 	/**
 	 * computes average value of a currency over the given time frame
 	 */
 	@Override
 	public double average(String currency, String base)
 	{
+		JSONParser parser = new JSONParser();
 		double acc = 0;
-		double unit;
-		int i=0;
 		int j=0;
-		for(String date:this.help) {
-			for(i=0;i<days.size();i++) {
-			if(days.get(i).getString("date").equals(date)) {
-				unit = days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				acc += 1/((days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit);
-				j++;
-			}
-				
-			}
+		for(String d : this.days) {
+
+			acc += curValue(currency, base, d);
+			j++;
 		}
+				
 
 		
 		return acc/j;
@@ -137,21 +148,12 @@ public class Stats implements StatsInterface{
 	public double variance(String currency, String base){
 		double avg = this.average(currency, base);
 		double acc = 0;
-		double unit;
 		double tmp;
-		int i=0;
 		int j=0;
-		for(String date:this.help) {
-			for(i=0;i<days.size();i++) {
-			if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				tmp = (((1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit) - avg);
-				acc += (tmp * tmp);
-				j++;
-				
-			}
-				
-			}
+		for(String d : this.days) {
+			tmp = (curValue(currency, base, d) - avg);
+			acc += (tmp * tmp);
+			j++;
 		}
 				
 			
@@ -168,18 +170,13 @@ public class Stats implements StatsInterface{
 		double unit;
 		int i=0;
 		int j=0;
-		for(String date:this.help) {
-			for(i=0;i<days.size();i++) {
-			if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
-				if(j == 0 || tmp < acc) {
-					acc = tmp;
-					j++;
-				}
+		for(String d : this.days) {
+			tmp = curValue(currency, base, d);
+			if(j == 0 || tmp < acc) {
+				acc = tmp;
+				j++;
 			}
 		
-		}
 		}
 		return acc;
 	}
@@ -190,20 +187,16 @@ public class Stats implements StatsInterface{
 	public double maximum(String currency, String base){
 		double tmp;
 		double acc=0;
-		double unit;
 		int i=0;
-		for(String date:this.help) {
-			for(i=0;i<days.size();i++) {
-			if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				tmp = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
-				if(i == 0 || tmp > acc)
-					acc = tmp;
-				
+		for(String d : this.days) {
+			tmp = curValue(currency, base, d);
+			if(i == 0 || tmp > acc){
+				acc = tmp;
+				i++;
 			}
+			
+		}
 		
-		}
-		}
 		return acc;
 	}
 	/**
@@ -220,20 +213,15 @@ public class Stats implements StatsInterface{
 		int count = 0;
 		double unit;
 		ArrayList<Double> res = new ArrayList<Double>();
-		for(String date : this.help) {
-			for(int i=0;i<days.size();i++) {
-				if(days.get(i).getString("date").equals(date) && base.length() == 3 && currency.length() == 3) {
-				unit = 1/days.get(i).getJSONObject("quotes").getDouble("USD" + base.toUpperCase());
-				value = (1/days.get(i).getJSONObject("quotes").getDouble("USD" + currency.toUpperCase()))/unit;
+			for(String d : this.days) {
+				value = curValue(currency, base, d);
 				if(count > 0)
 					res.add(Double.valueOf(percent ? ((value-prev)*100/prev):(value-prev)));
 				else
 					res.add(Double.valueOf(value));
 				prev = value;
-				}
+				count++;
 			}
-			count++;
-		}
 		return res;
 	}
 
