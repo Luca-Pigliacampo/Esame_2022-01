@@ -67,9 +67,9 @@ public class Conversion {
 	}
 	/**
 	 * 
-	 * @param src   la sigla della moneta di partenza (Es. EUR)
-	 * @param tgt   la sigla della moneta di arrivo
-	 * @param amount quantità da convertire
+	 * @param src   initial ISO 4217 currency code
+	 * @param tgt   final ISO 4217 currency code
+	 * @param amount selected quantity
 	 */
 	public void conversion(String src,String tgt,double amount) throws MalformedURLException, URISyntaxException, IOException {
 		
@@ -106,36 +106,13 @@ public class Conversion {
 		this.date=date ;
 
 	}
-	public Map conversion(String src,String tgt) throws IOException, URISyntaxException, CurrencyNotFoundException {
-		this.amount=1;
-		JSONParser a=new JSONParser();
-		a.saveOnFile("live.json", 1, LocalDate.now());
-		try {
-			this.src=a.getCurrencyfromFile("live.json", src.toUpperCase());
-		} catch (CurrencyNotFoundException e) {
-			throw new CurrencyNotFoundException("La valuta "+src+" non esiste");
-		}
-		try {
-			this.tgt=a.getCurrencyfromFile("live.json", tgt.toUpperCase());
-		}  catch (CurrencyNotFoundException e) {
-			throw new CurrencyNotFoundException("La valuta "+tgt+" non esiste");
-		}
-		double rateUSDx =this.tgt.getExchange_rate();
-		double rateUSDy =1/this.src.getExchange_rate();
-		this.exchange_rate_src_tgt=rateUSDx*rateUSDy;
-		if (src.equals(tgt)) {
-			throw new SameCurrencyException ("Non puoi inserire due valute uguali!");
-		}
-		Map <String, Object> map = new LinkedHashMap<String,Object>();
-		Currency currencyA=new Currency(this.src.getCode(), this.src.getDescription());
-		Currency currencyB = new Currency(this.tgt.getCode(), this.tgt.getDescription());
-		map.put("currency1", currencyA);
-		map.put("currency2", currencyB);
-		map.put("exchange_rate", this.exchange_rate_src_tgt);
-		return map;
 
-	}
-	//metodo da controllare con conversion(String src,String tgt) per sapere quale conviene usare
+	/**
+	 * 
+	 * @param src initial ISO 4217 currency code
+	 * @param tgt final ISO 4217 currency code
+	 * @return a  Map<String,Object> with the specific exchange_rate from src to tgt
+	 */
 	public Map<String,Object> JsonModel(String src,String tgt) throws MalformedURLException, URISyntaxException, IOException{
 		Conversion b=new Conversion();
 		JSONParser a=new JSONParser();

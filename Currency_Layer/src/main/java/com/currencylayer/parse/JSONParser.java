@@ -30,10 +30,10 @@ public class JSONParser {
 
 	/**
 	 * 
-	 * @param code sigla moneta
-	 * @return	oggetto currency corrispondente
-	 * @throws URISyntaxException 
-	 * @throw  DateErrorException 
+	 * @param   code ISO 4217 currency code
+	 * @return  corresponding currency object from API
+	 * @throws  DateErrorException
+	 * @throws  URISyntaxExceptionn
 	 */
 	public Currency getValuefromApi(String code) throws DateErrorException, URISyntaxException  { // GBP EUR
 		JSONObject obj = JsonFromApi (0,LocalDate.now()); //Prende il JSON object presente sull'endpoint "list"
@@ -46,7 +46,15 @@ public class JSONParser {
 
 		return currency;
 	} //da chiedere se togliere
-
+        /**
+	 * 
+	 * @param   path file path
+	 * @param   code ISO 4217 currency code
+	 * @return	corresponding currency object from File
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws URISyntaxException
+	 */
 	public Currency getValuefromFile(String path, String Code)
 			throws IOException, MalformedURLException, URISyntaxException{
 		Currency currency = new Currency(Code);
@@ -64,8 +72,13 @@ public class JSONParser {
 
 		return currency;
 	}
-
-	// @param nomeFile dove salvare
+/**   
+ * 
+ * @param nomeFile file name where to save API response
+ * @param i integer of the corresponding Endpoint   
+ * @param d date
+ * @throws URISyntaxException
+ */
 	public void saveOnFile(String nomeFile,int i ,LocalDate d) throws URISyntaxException {
 		JSONObject obj = JsonFromApi(i,d);
 		try {
@@ -78,7 +91,16 @@ public class JSONParser {
 		}
 
 	}
-
+	
+/**
+ * 
+ * @param i integer of the corresponding Endpoint  
+ * @param d date
+ * @return a JSONObject from API
+ * @throws CurrencyNotFoundException
+ * @throws DateErrorException
+ * @throws URISyntaxException
+ */
 	public JSONObject JsonFromApi(int i,LocalDate d)throws CurrencyNotFoundException, DateErrorException, URISyntaxException {
 		JSONObject obj;
 		String url = "http://api.currencylayer.com/"+Endpoint[i] + "?access_key=" + api_key;
@@ -102,6 +124,15 @@ public class JSONParser {
 	public String getApi_key() {
 		return api_key;
 	}
+/**
+ * 
+ * @param code ISO 4217 currency code
+ * @param d date
+ * @return a Pair object from API request
+ * @throws URISyntaxException
+ * @throws MalformedURLException
+ * @throws IOException
+ */
 	public Pair getPairfromApi(String code,LocalDate d)  throws URISyntaxException, MalformedURLException, IOException{
 		JSONObject obj;
 		JSONObject quotesObj;
@@ -129,7 +160,18 @@ public class JSONParser {
 		}
 		return pair;
 	}
-
+/**
+ * 
+ * @param   path file path
+ * @param   Code ISO 4217 currency code
+ * @return a Pair object form file
+ * @throws AmountFormatException
+ * @throws IOException
+ * @throws DateErrorException
+ * @throws  CurrencyNotFoundException
+ * @throws   MalformedURLException
+ * @throws  URISyntaxException
+ */
 	public Pair getCurrencyfromFile(String path, String Code) throws  AmountFormatException, IOException, DateErrorException, CurrencyNotFoundException, MalformedURLException, URISyntaxException{
 		String path1="valuta.json";
 		JSONObject Obj;
