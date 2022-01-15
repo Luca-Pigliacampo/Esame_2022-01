@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.currencylayer.exception.AmountFormatException;
 import com.currencylayer.exception.CurrencyNotFoundException;
+import com.currencylayer.exception.SameCurrencyException;
 import com.currencylayer.parse.JSONParser;
 
 public class Conversion {
