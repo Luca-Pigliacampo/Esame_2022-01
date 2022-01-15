@@ -11,6 +11,7 @@ import com.currencylayer.Pair;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -117,8 +118,20 @@ public class Stats implements StatsInterface{
 	double curValue(String currency, String base, String day)
 	{
 		JSONParser parser = new JSONParser();
-		double unit = 1/parser.getCurrencyfromFile(day, base).getExchange_rate();
-		double value = (1/parser.getCurrencyfromFile(day, currency).getExchange_rate())/unit;
+		double unit;
+		double value = 0;
+		/* TODO:
+		 * questo try-catch è solo per prova
+		 * deve essere rimpiazzato con una soluzione adeguata
+		 * il prima possibile
+		 */
+		try {
+			unit = 1/parser.getCurrencyfromFile(day, base).getExchange_rate();
+			value = (1/parser.getCurrencyfromFile(day, currency).getExchange_rate())/unit;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return value;
 	}
 
