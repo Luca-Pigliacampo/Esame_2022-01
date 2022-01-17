@@ -77,16 +77,11 @@ public class Conversion {
 		this.amount=amount;
 		JSONParser a=new JSONParser();
 		a.saveOnFile("live.json", 1, null);
-		try {
+		
 			this.src=a.getCurrencyfromFile("live.json", src.toUpperCase());
-		} catch (CurrencyNotFoundException e) {
-			throw new CurrencyNotFoundException("La valuta "+src+" non esiste");
-		}
-		try {
+		
 			this.tgt=a.getCurrencyfromFile("live.json", tgt.toUpperCase());
-		} catch (CurrencyNotFoundException e) {
-			throw new CurrencyNotFoundException("La valuta "+tgt+" non esiste");
-		}
+		
 		
 		double rateUSDx =this.tgt.getExchange_rate();
 		double rateUSDy =1/this.src.getExchange_rate();
