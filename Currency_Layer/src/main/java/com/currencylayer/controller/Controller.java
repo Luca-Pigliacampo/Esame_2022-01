@@ -28,8 +28,32 @@ import com.currencylayer.parse.JSONParser;
 
 import com.currencylayer.Stats;
 
+/**
+ * 
+ * @author Luca Pigliacampo
+ * @author Mario Maio
+ * @author Emanuele Partemi
+ * 
+ * This class handle the HTTP requests sended by the user, for a specific root.
+ * A ResponseEntity object is returned with the requested data formatted in Json model.
+ *
+ */
+
 @RestController
 public class Controller {
+	
+	/**
+	 * 
+	 * @param src
+	 * @param tgt
+	 * @param amount
+	 * @return ResponseEntity
+	 * 
+	 * This root allows the user to convert two or more currencies.
+	 * As it is developed, it allows to convert one currency with another one or more 
+	 * (for example 1 EUR can be converted in USD, GBP and CAD).
+	 * 
+	 */
 
 	@GetMapping(value="/conversion", params= {"src","tgt","amount"})
 	public ResponseEntity<Conversion[]> getvalue(@RequestParam String[] src, @RequestParam String[] tgt,@RequestParam double amount) throws URISyntaxException, MalformedURLException, IOException {
@@ -54,15 +78,18 @@ public class Controller {
 
 		return ResponseEntity.ok(conv);	
 
-	}
-	@GetMapping (value="/liveExchange", params={"src"})
-	public ResponseEntity<Pair> getLivePair (@RequestParam String src) throws DateErrorException, URISyntaxException, CurrencyNotFoundException, MalformedURLException, IOException{
-		JSONParser pairObj = new JSONParser();
-		Pair pair=pairObj.getPairfromApi(src, LocalDate.now());
-		
-		return ResponseEntity.ok(pair);
-		
-	}
+	}	
+}
+	/**
+	 * 
+	 * @param src
+	 * @param tgt
+	 * @return ResponseEntity
+	 * 
+	 * This root returns the live exchange of a given pair. 
+	 * 
+	 */
+
 	@GetMapping (value="/live", params= {"src", "tgt"})
 	public Map<String,Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException, IOException{
 		Conversion conv=new Conversion();
@@ -70,7 +97,20 @@ public class Controller {
 
 		
 	}
-
+	
+	/**
+	 * 
+	 * 
+	 * @param cur Currency 1
+	 * @param bas Currency 2
+	 * @param opt options (average, minimum, variance, maximum)
+	 * @param std starting date
+	 * @param end end date
+	 * @return ResponseEntity
+	 * 
+	 * This root allows the user to obtain average, minimum, variance, maximum
+	 * for a given pair (cur/bas), in a given period (starting date, end date).
+	 */
 
 	@GetMapping(value="/stat", params={"cur","bas","opt","std","end"})
 	public ResponseEntity<HashMap<String,HashMap<String,Object>>> getStats(
