@@ -12,7 +12,6 @@ package com.currencylayer.exception;
  * Handled by Handler.java
  */
 
-public
 
 public class AmountFormatException extends RuntimeException {
 	
