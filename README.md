@@ -146,12 +146,30 @@ Viene visualizzato il seguente messaggio di errore:
 }
 ```
 - **DateErrorException.java**
-Viene richiamata quando il programma ottiene una data in un formato errato.
+ 
+ Viene richiamata quando il programma ottiene una data in un formato errato.
+ Viene visualizzato il seguente messaggio di errore:
+ 
+```
+{
+    "message": "Errore nel formato della data. Il formato corretto è YYYY-MM-DD.",
+    "httpStat": "BAD_REQUEST",
+    "time": "2022-01-17T12:36:55.5340542+01:00"
+}
+```
+- **SameCurrencyException.java**
+
+Viene richiamata quando si inseriscono le stesse valute (ES: EUR-EUR).
+
 Viene visualizzato il seguente messaggio di errore:
 ```
+{
+    "message": "Non puoi inserire due valute uguali!",
+    "httpStat": "BAD_REQUEST",
+    "time": "2022-01-12T14:21:11.1275878+01:00"
+}
 
 ```
-
 
 	
 
