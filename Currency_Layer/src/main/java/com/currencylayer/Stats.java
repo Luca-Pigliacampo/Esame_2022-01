@@ -81,6 +81,7 @@ public class Stats implements StatsInterface{
 
 		while(! day.equals(limit)){
 			this.days.add("week/"+day.format(DateTimeFormatter.ISO_LOCAL_DATE));
+			day = day.plusDays(1);
 		}
 	
 
