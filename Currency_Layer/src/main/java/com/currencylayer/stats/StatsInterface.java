@@ -1,4 +1,4 @@
-package com.currencylayer;
+package com.currencylayer.stats;
 
 import java.time.LocalDate;
 import java.util.HashMap;

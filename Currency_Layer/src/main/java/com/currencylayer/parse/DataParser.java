@@ -2,7 +2,6 @@ package com.currencylayer.parse;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,20 +12,20 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.client.RestTemplate;
 
-import com.currencylayer.Currency;
-import com.currencylayer.Pair;
-import com.currencylayer.exception.AmountFormatException;
 import com.currencylayer.exception.CurrencyNotFoundException;
-import com.currencylayer.exception.DateErrorException;
+import com.currencylayer.model.Currency;
+import com.currencylayer.model.Pair;
+
 
 
 /**
  * class that handles both the parsing of json files and the fetching of informations
  */
-public class JSONParser {
+public class DataParser {
 	private final String api_key = "3d4885c32c9a655712aff09b44c7ccf6";
 	private String[] Endpoint= {"list" , "live","&date=%04d-%02d-%02d "};
 
@@ -36,7 +35,7 @@ public class JSONParser {
 	 * @return  corresponding currency object from API
 	 * @throws  URISyntaxExceptionn
 	 */
-	public Currency getValuefromApi(String code) throws URISyntaxException  { // GBP EUR
+	public Currency getValuefromApi(String code) throws URISyntaxException, CurrencyNotFoundException{ // GBP EUR
 		try {
 		JSONObject obj = JsonFromApi (0,LocalDate.now()); //Prende il JSON object presente sull'endpoint "list"
 		Currency currency = new Currency(code); //istanza dell'oggetto currency con il code corrispondente
@@ -47,6 +46,7 @@ public class JSONParser {
 		currency.setDescription(description);
 
 		return currency;
+		}
 		catch (JSONException e){
 			throw new CurrencyNotFoundException("La valuta "+code+" non esiste");
 		}
@@ -60,7 +60,7 @@ public class JSONParser {
 	 * @throws MalformedURLException
 	 * @throws URISyntaxException
 	 */
-	public Currency getValuefromFile(String path, String Code) throws IOException, MalformedURLException, URISyntaxException{
+	public Currency getValuefromFile(String path, String Code) throws IOException, MalformedURLException, URISyntaxException, CurrencyNotFoundException{
 	try {
 		Currency currency = new Currency(Code);
 		Scanner file_input = new Scanner(new BufferedReader(new FileReader(path)));
@@ -185,7 +185,7 @@ public class JSONParser {
 
 		Scanner file_input = new Scanner(new BufferedReader(new FileReader(path)));
 		String str = file_input.nextLine();
-		currency=this.getValuefromFile( path1, Code);
+		currency=this.getValuefromFile( path1, Code.toUpperCase());
 		file_input.close();
 
 		Obj = new JSONObject(str);

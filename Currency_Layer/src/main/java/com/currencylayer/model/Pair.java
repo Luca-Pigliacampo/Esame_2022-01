@@ -1,4 +1,4 @@
-package com.currencylayer;
+package com.currencylayer.model;
 
 /**
  * a pair of currencies

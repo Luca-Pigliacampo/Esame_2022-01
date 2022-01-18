@@ -1,4 +1,4 @@
-package com.currencylayer;
+package com.currencylayer.model;
 
 import java.util.Objects;
 

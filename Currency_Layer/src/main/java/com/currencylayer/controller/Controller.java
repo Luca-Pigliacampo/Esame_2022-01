@@ -4,29 +4,23 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
-import org.json.JSONObject;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.time.LocalDate;
 
-import com.currencylayer.Conversion;
-import com.currencylayer.Currency;
-import com.currencylayer.Pair;
-import com.currencylayer.exception.AmountFormatException;
 import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.exception.DateErrorException;
-import com.currencylayer.exception.ExceptionModel;
-import com.currencylayer.parse.JSONParser;
-
-import com.currencylayer.Stats;
+import com.currencylayer.exception.SameCurrencyException;
+import com.currencylayer.model.Conversion;
+import com.currencylayer.stats.Stats;
 
 /**
  * 
@@ -79,12 +73,12 @@ public class Controller {
 		return ResponseEntity.ok(conv);	
 
 	}	
-}
+
 	/**
 	 * 
 	 * @param src
 	 * @param tgt
-	 * @return ResponseEntity
+	 * @return 
 	 * 
 	 * This root returns the live exchange of a given pair. 
 	 * 
@@ -118,13 +112,13 @@ public class Controller {
 			@RequestParam String bas,
 			@RequestParam String[] opt,
 			@RequestParam String std,
-			@RequestParam String end) throws CurrencyNotFoundException, DateErrorException, URISyntaxException
+			@RequestParam String end) throws CurrencyNotFoundException, DateErrorException, URISyntaxException, SameCurrencyException
 	{
 		HashMap<String,HashMap<String,Object>> res = new HashMap<String,HashMap<String,Object>>();
 		Stats stObj = new Stats();
 		try {
 			for(String moneta : cur){
-				res.put(moneta, stObj.createMap(
+				res.put(moneta.toUpperCase()+"-"+bas.toUpperCase(), stObj.createMap(
 						moneta,
 						bas,
 						opt,
@@ -134,14 +128,8 @@ public class Controller {
 		}
 		catch (DateTimeParseException e) {
 			throw new DateErrorException("Errore nel formato della data. Il formato corretto è YYYY-MM-DD.");
-		}
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
+		
 		return ResponseEntity.ok(res);
 	}
 

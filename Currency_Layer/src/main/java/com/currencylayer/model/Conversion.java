@@ -1,4 +1,4 @@
-package com.currencylayer;
+package com.currencylayer.model;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.currencylayer.exception.AmountFormatException;
 import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.exception.SameCurrencyException;
-import com.currencylayer.parse.JSONParser;
+import com.currencylayer.parse.DataParser;
 
 public class Conversion implements Converter {
 	private Pair src;
@@ -72,10 +72,10 @@ public class Conversion implements Converter {
 	 * @param tgt   final ISO 4217 currency code
 	 * @param amount selected quantity
 	 */
-	public void conversion(String src,String tgt,double amount) throws MalformedURLException, URISyntaxException, IOException {
+	public void conversion(String src,String tgt,double amount) {
 		
 		this.amount=amount;
-		JSONParser a=new JSONParser();
+		DataParser a=new DataParser();
 		try{
 			a.saveOnFile("live.json", 1, null);
 		
@@ -121,14 +121,14 @@ public class Conversion implements Converter {
 	 */
 	public Map<String,Object> JsonModel(String src,String tgt) throws MalformedURLException, URISyntaxException, IOException{
 		Conversion b=new Conversion();
-		JSONParser a=new JSONParser();
+		DataParser a=new DataParser();
 		b.conversion(src, tgt, 1);
 		JSONObject main=null;
 		JSONObject main1=null;
 
 		try {
-			main=new JSONObject(a.getCurrencyfromFile("valuta.json", src));
-			main1=new JSONObject(a.getCurrencyfromFile("valuta.json", tgt));
+			main=new JSONObject(a.getValuefromFile("valuta.json", src));
+			main1=new JSONObject(a.getValuefromFile("valuta.json", tgt));
 
 		} catch (URISyntaxException | IOException e) {
 			// TODO Auto-generated catch block
