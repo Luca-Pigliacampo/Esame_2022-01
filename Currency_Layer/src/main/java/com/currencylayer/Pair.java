@@ -1,5 +1,8 @@
 package com.currencylayer;
 
+/**
+ * a pair of currencies
+ */
 public class Pair extends Currency{
 	
 	private double exchange_rate;

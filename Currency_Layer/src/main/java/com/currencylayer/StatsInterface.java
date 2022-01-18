@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+/**
+ * interface describing the Stats endpoint
+ */
 public interface StatsInterface {
 
 	/**

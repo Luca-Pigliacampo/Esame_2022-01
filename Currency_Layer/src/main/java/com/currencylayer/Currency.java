@@ -2,7 +2,9 @@ package com.currencylayer;
 
 import java.util.Objects;
 
-
+/**
+ * class used to represent currencies
+ */
 public class Currency {
 	private String code; 
 	private String description;

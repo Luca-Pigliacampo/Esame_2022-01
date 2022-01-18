@@ -23,7 +23,9 @@ import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.exception.DateErrorException;
 
 
-
+/**
+ * class that handles both the parsing of json files and the fetching of informations
+ */
 public class JSONParser {
 	private final String api_key = "3d4885c32c9a655712aff09b44c7ccf6";
 	private String[] Endpoint= {"list" , "live","&date=%04d-%02d-%02d "};

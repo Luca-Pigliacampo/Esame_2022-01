@@ -20,6 +20,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * class that handles statistics
+ */
 public class Stats implements StatsInterface{
 
 	private ArrayList<String> days = new ArrayList<String>();
@@ -31,6 +34,8 @@ public class Stats implements StatsInterface{
 	}
 
 	/**
+	 * gets informations on the value over time of the currencies specified
+	 *
 	 * @param bas currency to use as unit of measurement
 	 * @param opt name of the informations to get in a comma separated list, accepted values: average,variance,minimum,maximum,fluct-per,fluct-abs
 	 * @param cur currency to get statistics about in a comma separated list
@@ -138,6 +143,9 @@ public class Stats implements StatsInterface{
 
 	/**
 	 * computes average value of a currency over the given time frame
+	 * 
+	 * @param currency three-characters code of the currency to measure
+	 * @param base three-characters code of the currency to use as unit of measurement
 	 */
 	@Override
 	public double average(String currency, String base)
@@ -157,6 +165,9 @@ public class Stats implements StatsInterface{
 	}
 	/**
 	 * computes variance of a currency's value over the given time frame
+	 * 
+	 * @param currency three-characters code of the currency to measure
+	 * @param base three-characters code of the currency to use as unit of measurement
 	 */
 	@Override
 	public double variance(String currency, String base){
@@ -176,6 +187,9 @@ public class Stats implements StatsInterface{
 	}
 	/**
 	 * finds the minimum value reached by the currency within the given timeframe
+	 * 
+	 * @param currency three-characters code of the currency to measure
+	 * @param base three-characters code of the currency to use as unit of measurement
 	 */
 	@Override
 	public double minimum(String currency, String base){
@@ -196,6 +210,9 @@ public class Stats implements StatsInterface{
 	}
 	/**
 	 * finds the maximum value reached by the currency within the given timeframe
+	 * 
+	 * @param currency three-characters code of the currency to measure
+	 * @param base three-characters code of the currency to use as unit of measurement
 	 */
 	@Override
 	public double maximum(String currency, String base){
@@ -215,10 +232,13 @@ public class Stats implements StatsInterface{
 	}
 	/**
 	 * lists fluctuations of the given currency's value.
-	 *
-	 * the first element of the array is the value at the start.
-	 * the other elements are the fluctuations of value,
-	 * expressed either as absolute values or percentages
+	 *<p>
+	 * the first element of the array is the value at the start.<br/>
+	 * the other elements are the fluctuations of value,<br/>
+	 * expressed either as absolute values or percentages<br/>
+	 *</p>
+	 * @param currency three-characters code of the currency to measure
+	 * @param base three-characters code of the currency to use as unit of measurement
 	 */
 	@Override
 	public ArrayList<Double> fluctuation(String currency, String base, boolean percent){
