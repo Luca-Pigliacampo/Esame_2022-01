@@ -21,7 +21,7 @@ import com.currencylayer.exception.CurrencyNotFoundException;
 import com.currencylayer.exception.SameCurrencyException;
 import com.currencylayer.parse.JSONParser;
 
-public class Conversion {
+public class Conversion implements Converter {
 	private Pair src;
 	private Pair tgt;
 	private double amount;
@@ -76,12 +76,22 @@ public class Conversion {
 		
 		this.amount=amount;
 		JSONParser a=new JSONParser();
-		a.saveOnFile("live.json", 1, null);
+		try{
+			a.saveOnFile("live.json", 1, null);
 		
 			this.src=a.getCurrencyfromFile("live.json", src.toUpperCase());
 		
 			this.tgt=a.getCurrencyfromFile("live.json", tgt.toUpperCase());
-		
+		} catch (URISyntaxException e) {
+			
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
 		
 		double rateUSDx =this.tgt.getExchange_rate();
 		double rateUSDy =1/this.src.getExchange_rate();
