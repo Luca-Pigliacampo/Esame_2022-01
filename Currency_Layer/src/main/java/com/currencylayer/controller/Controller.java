@@ -122,14 +122,19 @@ public class Controller {
 	{
 		HashMap<String,HashMap<String,Object>> res = new HashMap<String,HashMap<String,Object>>();
 		Stats stObj = new Stats();
-		for(String moneta : cur){
-			res.put(moneta, stObj.createMap(
+		try {
+			for(String moneta : cur){
+				res.put(moneta, stObj.createMap(
 						moneta,
 						bas,
 						opt,
 						LocalDate.parse(std.trim()),
 						LocalDate.parse(end.trim())));
-
+			}
+		}
+		catch (DateTimeParseException e) {
+			throw new DateErrorException("Errore nel formato della data. Il formato corretto è YYYY-MM-DD.");
+		}
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
