@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.currencylayer"},{"l":"com.currencylayer.controller"},{"l":"com.currencylayer.exception"},{"l":"com.currencylayer.model"},{"l":"com.currencylayer.parse"},{"l":"com.currencylayer.stats"}];updateSearchResults();

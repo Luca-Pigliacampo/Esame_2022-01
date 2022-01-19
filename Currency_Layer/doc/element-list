@@ -1,0 +1,6 @@
+com.currencylayer
+com.currencylayer.controller
+com.currencylayer.exception
+com.currencylayer.model
+com.currencylayer.parse
+com.currencylayer.stats
