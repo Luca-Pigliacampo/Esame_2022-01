@@ -62,7 +62,7 @@ Al termine della realizzazione del progetto, sono stati effettuati test unitari 
   <a>Per avere l'eseguibile in formato jar su Windows invece:
    ```
    cd Esame_2022-01\Currency_Layer # entrare nella directory del progetto
-   .\mvnw.cmd                      # compilare e creare l'eseguibile
+   .\mvnw.cmd package              # compilare e creare l'eseguibile
    ```
    ora il file jar si trova nella cartella `target` e può essere eseguito con:
    ```
