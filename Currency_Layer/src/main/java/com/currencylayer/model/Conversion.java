@@ -99,7 +99,7 @@ public class Conversion implements Converter {
 		if (amount>0)
 		this.result=this.exchange_rate_src_tgt*this.amount;	
 		else throw new AmountFormatException("Inserisci un valore positivo");
-		if (src.equals(tgt)) {
+		if (src.toUpperCase().equals(tgt.toUpperCase)) {
 			throw new SameCurrencyException ("Non puoi inserire due valute uguali!");
 		}
 		LocalDateTime dat=LocalDateTime.now()
