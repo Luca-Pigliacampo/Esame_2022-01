@@ -4,12 +4,13 @@
 </p>
 	
 
-> La nostra applicazione permette di fare  confronti tra valute scelte  dall'utente nell'arco temporale di 7 giorni e riportare statistiche dinamiche quali media e varianza delle stesse in base ad un range di giorni settimanale definito dall'utente.
+> La nostra applicazione permette di fare  confronti tra valute scelte  dall'utente nell'arco temporale di 7 giorni e riportare statistiche dinamiche quali media, varianza, minimi e massimi delle stesse in base ad un range di giorni settimanale definito dall'utente. L'applicazione è stata sviluppata come progetto d'esame per il corso di Programmazione ad oggetti, per l'Anno Accademico 2021/22, presso l'Università Politecnica delle Marche.
   *** 
   
   ## *Indice*
 
   -  [Introduzione](#introduzione)
+  -  [Sviluppo](#Sviluppo)
   - [Download](#download)
   -  [Configurazione](#configurazione)
 
@@ -21,11 +22,23 @@
 
 <a name="introduzione"></a>
 ## *Introduzione*
-  <a>Lo scopo del progetto è quello di creare un programma Currency_Layer in grado di interagire con l' API di [Currencylayer](https://currencylayer.com/).
-  Si concentra principalmente sul fornire statistiche riguardo alcune monete in un range di giorni definito dall'utente. 
-  Prevede inoltre alcune rotte aggiuntive dedicate alla conversione da    una o più valute ad altre valute  scelte dall'utente.</a>
+  <a>Lo scopo del progetto è quello di creare una applicazione in grado di interagire con l' API di [Currencylayer](https://currencylayer.com/).
+  Si concentra principalmente sul fornire statistiche riguardo monete fisiche ed elettroniche in un range di giorni definito dall'utente. 
+  Prevede inoltre alcune rotte aggiuntive dedicate alla conversione da  una o più valute ad altre valute  scelte dall'utente.</a>
   
   <a name="download"></a>
+  
+  <a name="Sviluppo"></a>
+  ## *Sviluppo*
+  <a>L'applicazione è stata sviluppata tramite il framework Springboot, e le dipendenze sono state gestite con Maven. 
+Le varie classi Java all'interno del progetto, sono state modellate seguendo i principi della programmazione ad oggetti. Lavorando con coppie di valute, si è pensato di creare la classe  `Currency` per rappresentare la singola valuta, ed estendere tale classe con la classe  `Pair` , formata da una coppia di valute, e avente inoltre un Exchange rate.
+	
+Le interfacce implementate,  `StatsInterface` e `Converter`, astraggono alcuni concetti come la conversione e il calcolo delle statistiche. Non sarà quindi necessario, in futuro, andare a creare nuovi metodi per effetture conversioni e statistiche su altri oggetti modellati in Java (Come ad esempio Azioni, Materie prime ecc).
+	
+La classe `DataParser` gestisce l'interazione con l'API di CurrencyLayer, grazie all'utilizzo della libreria org.json.
+
+Al termine della realizzazione del progetto, sono stati effettuati test unitari con JUnit 5.
+</a>
  ## *Download*
   <a>Puoi scaricare il codice dal Prompt dei Comandi digitando:  
    ```
@@ -181,7 +194,7 @@ Viene visualizzato il seguente messaggio di errore:
   ## *Autori*
   Nome |  Contributo
   ---- |  -----------
-  Maio Mario | 33%
+  [Maio Mario](https://www.linkedin.com/in/mario-maio/) | 33%
   Partemi Emanuele | 33%
   Pigliacampo Luca | 33%
  
