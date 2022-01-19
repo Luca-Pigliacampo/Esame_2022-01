@@ -85,7 +85,7 @@ public class Controller {
 	 */
 
 	@GetMapping (value="/live", params= {"src", "tgt"})
-	public Map<String,Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws CurrencyNotFoundException, DateErrorException, URISyntaxException, IOException{
+	public Map<String,Object> getLiveExchange(@RequestParam String src, @RequestParam String tgt) throws URISyntaxException, IOException{
 		Conversion conv=new Conversion();
 		return conv.JsonModel(src,tgt);
 
