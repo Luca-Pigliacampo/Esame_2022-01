@@ -14,6 +14,10 @@ import java.util.ArrayList;
 
 
 /**
+ * @author Luca Pigliacampo
+ * @author Mario Maio
+ * @author Emanuele Partemi
+ *
  * class that handles statistics
  */
 public class Stats implements StatsInterface{
